@@ -9,3 +9,5 @@ start:
 	make start-backend
 develop:
 	make start-backend & make start-frontend
+install:
+	npm ci
