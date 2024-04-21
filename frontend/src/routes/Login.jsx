@@ -1,27 +1,28 @@
-import { Formik, Field, Form } from "formik";
+import FormLogin from "../components/FormLogin";
 
 const Login = () => {
   return (
-    <Formik
-      initialValues={{ username: "", password: "" }}
-      onSubmit={(values) => {
-        console.log("send", values);
-      }}
-    >
-      {() => (
-        <Form>
-          <div className="form-floating mb-3">
-            <label htmlFor="username">Ваш ник</label>
-            <Field type="text" name="username" className='form-control' placeholder='Ваш ник' />
+    <div className="container-fluid h-100">
+      <div className="row justify-content-center align-content-center h-100">
+        <div className="col-12 col-md-8 col-xxl-6">
+          <div className="card shadow-sm">
+            <div className="card-body row p-5">
+              <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                <img src="./images/avatar1.jpg" alt="Войти" />
+              </div>
+              <FormLogin />
+            </div>
+            <div className="card-footer p-4">
+              <div className="text-center">
+                <span className="m-1">Нет аккаунта?</span>
+                <a href="/signup">Регистрация</a>
+              </div>
+            </div>
           </div>
-          <div className="form-floating mb-4">
-            <label htmlFor="password">Пароль</label>
-            <Field type="password" name="password" className='form-control' placeholder='Пароль' />
-          </div>
-          <button type="submit">Войти</button>
-        </Form>
-      )}
-    </Formik>
+        </div>
+      </div>
+    </div>
   );
 };
+
 export default Login;
