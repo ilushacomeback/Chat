@@ -1,7 +1,7 @@
 import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
 
 const authAdapter = createEntityAdapter();
-const initialState = authAdapter.getInitialState({ auth: false });
+const initialState = authAdapter.getInitialState({ auth: false, error: false });
 
 const authSlice = createSlice({
   name: "auth",
@@ -13,6 +13,12 @@ const authSlice = createSlice({
     removeAuth(state) {
       state.auth = false;
     },
+    setError(state) {
+      state.error = true
+    },
+    removeError(state) {
+      state.error = false
+    }
   },
 });
 

@@ -1,15 +1,18 @@
-import { useFormik } from "formik";
-import { Form, Button, FloatingLabel } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import axios from "axios";
-import getAuth from "../utils/getAuth";
+import cn from "classnames";
+import { useFormik } from "formik";
+import { Form, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { actions as authActions } from "../slices/authSlice";
+import getAuth from "../utils/getAuth";
+import InvalidLogin from "./InvalidLogin";
 
 const FormLogin = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
-  const { setAuth } = authActions
+  const dispatch = useDispatch();
+  const error = useSelector((state) => state.authReducer.error);
+  const { setAuth, setError, removeError } = authActions;
 
   const formik = useFormik({
     initialValues: {
@@ -19,16 +22,22 @@ const FormLogin = () => {
     onSubmit: (values) => {
       getAuth(axios, values)
         .then((data) => {
-          localStorage.setItem("user", JSON.stringify(data))
-          dispatch(setAuth())
+          localStorage.setItem("user", JSON.stringify(data));
+          dispatch(removeError());
+          dispatch(setAuth());
           return navigate("/");
         })
         .catch((e) => {
           console.log(e);
+          dispatch(setError());
         });
     },
   });
-  
+
+  const classesForFormControl = cn({
+    "is-invalid": error,
+  });
+
   return (
     <Form
       onSubmit={formik.handleSubmit}
@@ -37,32 +46,34 @@ const FormLogin = () => {
       method="post"
     >
       <h1 className="text-center mb-4">Войти</h1>
-      <Form.Group className="form-floating mb-3">
-        <FloatingLabel htmlFor="username" label="Ваш ник">
-          <Form.Control
-            type="text"
-            name="username"
-            className="form-control"
-            placeholder="Ваш ник"
-            onChange={formik.handleChange}
-            value={formik.values.username}
-            required
-          />
-        </FloatingLabel>
-      </Form.Group>
-      <Form.Group className="form-floating mb-4">
-        <FloatingLabel htmlFor="password" label="Пароль">
-          <Form.Control
-            type="password"
-            name="password"
-            className="form-control"
-            placeholder="Пароль"
-            onChange={formik.handleChange}
-            value={formik.values.password}
-            required
-          />
-        </FloatingLabel>
-      </Form.Group>
+
+      <Form.Floating className="mb-3">
+        <Form.Control
+          className={classesForFormControl}
+          type="text"
+          name="username"
+          id="username"
+          placeholder="Ваш ник"
+          onChange={formik.handleChange}
+          value={formik.values.username}
+          required
+        />
+        <label htmlFor="username">Ваш ник</label>
+      </Form.Floating>
+      <Form.Floating className="mb-4">
+        <Form.Control
+          className={classesForFormControl}
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Пароль"
+          onChange={formik.handleChange}
+          value={formik.values.password}
+          required
+        />
+        <Form.Label htmlFor="password">Пароль</Form.Label>
+        {error ? <InvalidLogin /> : null}
+      </Form.Floating>
       <Button type="submit" className="w-100 mb-3" variant="outline-primary">
         Войти
       </Button>
