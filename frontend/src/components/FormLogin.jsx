@@ -1,29 +1,34 @@
 import { useFormik } from "formik";
 import { Form, Button, FloatingLabel } from "react-bootstrap";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import getAuth from "../utils/getAuth";
+import { actions as authActions } from "../slices/authSlice";
 
 const FormLogin = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const { setAuth } = authActions
+
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
     },
-    onSubmit: async (values) => {
-      try {
-        const { username, password } = values;
-        const response = await axios.post("/api/v1/login", {
-          username: username,
-          password: password,
+    onSubmit: (values) => {
+      getAuth(axios, values)
+        .then((data) => {
+          localStorage.setItem("user", JSON.stringify(data))
+          dispatch(setAuth())
+          return navigate("/");
+        })
+        .catch((e) => {
+          console.log(e);
         });
-        console.log(response.data)
-        return navigate("/");
-      } catch (error) {
-        console.log(error);
-      }
     },
   });
+  
   return (
     <Form
       onSubmit={formik.handleSubmit}
