@@ -1,13 +1,21 @@
+import axios from "axios";
 import { useFormik } from "formik";
 import { Form, Button, InputGroup } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import postMessage from "../utils/postMessage";
 
 const FormSendMessage = () => {
+  const channelId = useSelector((state) => state.chatReducer.activeChannelId);
+  const token = useSelector((state) => state.authReducer.token);
   const formik = useFormik({
     initialValues: {
       body: "",
     },
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: ({ body }) => {
+      const dataLocalStorage = localStorage.getItem("user");
+      const username = JSON.parse(dataLocalStorage).username;
+      const data = { body, channelId, username };
+      postMessage(axios, token, data);
     },
   });
 
