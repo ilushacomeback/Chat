@@ -6,7 +6,7 @@ const getAuth = async (httpClient, data) => {
     return response.data;
   } catch (error) {
     console.log(error)
-    throw new Error('ww')
+    throw new Error('Network Error')
   }
 };
 

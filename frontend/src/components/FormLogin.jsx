@@ -24,7 +24,7 @@ const FormLogin = () => {
         .then((data) => {
           localStorage.setItem("user", JSON.stringify(data));
           dispatch(removeError());
-          dispatch(setAuth());
+          dispatch(setAuth({ token: data.token }));
           return navigate("/");
         })
         .catch((e) => {

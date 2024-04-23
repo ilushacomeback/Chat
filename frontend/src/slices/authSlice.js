@@ -1,24 +1,25 @@
-import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-const authAdapter = createEntityAdapter();
-const initialState = authAdapter.getInitialState({ auth: false, error: false });
+const initialState = { auth: false, error: false, token: null };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setAuth(state) {
+    setAuth(state, { payload: { token } }) {
+      state.token = token;
       state.auth = true;
     },
     removeAuth(state) {
+      state.token = null;
       state.auth = false;
     },
     setError(state) {
-      state.error = true
+      state.error = true;
     },
     removeError(state) {
-      state.error = false
-    }
+      state.error = false;
+    },
   },
 });
 
