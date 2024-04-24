@@ -2,7 +2,7 @@ import routes from "../routes";
 
 const getMessages = async (httpClient, token) => {
   try {
-    const response = await httpClient.get(routes.getMessages(), {
+    const response = await httpClient.get(routes.messages(), {
       headers: {
         Authorization: `Bearer ${token}`,
       },

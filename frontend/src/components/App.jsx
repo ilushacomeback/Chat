@@ -1,21 +1,27 @@
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { actions as authActions } from "./slices/authSlice";
-import Root from "./components/Root";
-import Login from "./components/Login";
-import ErrorPage from "./components/ErrorPage";
-import ExitButton from "./components/ExitButton";
+import { useDispatch } from "react-redux";
+import { actions as authActions } from "../slices/authSlice";
+import Root from "./Root";
+import Login from "./Auth/Login";
+import ErrorPage from "./ErrorPage";
 
 const App = () => {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const isAuth = useSelector((state) => state.authReducer.auth);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { removeAuth } = authActions;
 
   const handleUseExit = () => {
     localStorage.removeItem("user");
     dispatch(removeAuth());
     navigate("/login");
+  };
+
+  const ExitButton = ({ handleUseExit }) => {
+    return (
+      <button onClick={handleUseExit} className="btn btn-primary">
+        Выйти
+      </button>
+    );
   };
 
   return (
@@ -25,7 +31,7 @@ const App = () => {
           <Link to="/" className="navbar-brand">
             Hexlet Chat
           </Link>
-          {isAuth ? <ExitButton handleUseExit={handleUseExit} /> : null}
+          { localStorage.getItem("user") && <ExitButton handleUseExit={handleUseExit} />}
         </div>
       </nav>
       <Routes>

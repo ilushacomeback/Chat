@@ -1,8 +1,8 @@
 import routes from "../routes";
 
-const postMessage = async (httpClient, token, data) => {
+const postChannel = async (httpClient, token, data) => {
   try {
-    const response = await httpClient.post(routes.messages(), data, {
+    const response = await httpClient.post(routes.channels(), data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -14,4 +14,4 @@ const postMessage = async (httpClient, token, data) => {
   }
 };
 
-export default postMessage;
+export default postChannel;

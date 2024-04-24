@@ -5,16 +5,17 @@ import { useEffect } from "react";
 import { actions as authActions } from "../slices/authSlice";
 import { actions as channelsActions } from "../slices/channelsSlice";
 import { actions as messagesActions } from "../slices/messagesSlice";
+import { selectors } from "../selectors";
 import getChannels from "../utils/getChannels";
 import getMessages from "../utils/getMessages";
-import Chat from "./Chat";
+import Chat from "./Chat/ChatBox";
 import socket from "../utils/socket-io";
 
 const Root = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { setAuth } = authActions;
-  const { addChannels } = channelsActions;
+  const { addChannels, addChannel } = channelsActions;
   const { addMessages, addMessage } = messagesActions;
 
   useEffect(() => {
@@ -38,12 +39,15 @@ const Root = () => {
         socket.on("newMessage", (payload) => {
           dispatch(addMessage(payload));
         });
+        socket.on("newChannel", (payload) => {
+          dispatch(addChannel(payload));
+        });
       }
     };
     someDo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return useSelector((state) => state.authReducer.token) ? <Chat /> : null;
+  return useSelector(selectors.token) && <Chat />;
 };
 export default Root;

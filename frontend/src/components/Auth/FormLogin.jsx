@@ -4,14 +4,15 @@ import { useFormik } from "formik";
 import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { actions as authActions } from "../slices/authSlice";
-import getAuth from "../utils/getAuth";
+import { actions as authActions } from "../../slices/authSlice";
+import { selectors } from "../../selectors";
+import getAuth from "../../utils/getAuth";
 import InvalidLogin from "./InvalidLogin";
 
 const FormLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const error = useSelector((state) => state.authReducer.error);
+  const error = useSelector(selectors.errorAuth);
   const { setAuth, setError, removeError } = authActions;
 
   const formik = useFormik({
