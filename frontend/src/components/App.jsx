@@ -1,42 +1,25 @@
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { actions as authActions } from "../slices/authSlice";
-import Root from "./Root";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectors } from "../selectors";
 import Login from "./Auth/Login";
 import ErrorPage from "./ErrorPage";
+import Navbar from "./Navbar";
+import ChatBox from "./Chat/ChatBox";
 
 const App = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { removeAuth } = authActions;
-
-  const handleUseExit = () => {
-    localStorage.removeItem("user");
-    dispatch(removeAuth());
-    navigate("/login");
-  };
-
-  const ExitButton = ({ handleUseExit }) => {
-    return (
-      <button onClick={handleUseExit} className="btn btn-primary">
-        Выйти
-      </button>
-    );
+  const PrivateChat = () => {
+    const token = useSelector(selectors.token);
+    return token ? <Outlet /> : <Navigate to="/login" />;
   };
 
   return (
     <div className="d-flex flex-column h-100">
-      <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
-        <div className="container">
-          <Link to="/" className="navbar-brand">
-            Hexlet Chat
-          </Link>
-          { localStorage.getItem("user") && <ExitButton handleUseExit={handleUseExit} />}
-        </div>
-      </nav>
+      <Navbar />
       <Routes>
-        <Route exact path="/" element={<Root />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/" element={<PrivateChat />}>
+          <Route path="" element={<ChatBox />} />
+        </Route>
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </div>

@@ -1,16 +1,19 @@
 import { useSelector } from "react-redux";
-import { selectors, channelsSelectors, messagesSelectors } from "../../selectors";
 import FormSendMessage from "./FormSendMessage";
+import { useGetMessagesQuery } from "../../services/messagesApi";
+import { useGetChannelsQuery } from "../../services/channelsApi";
+import { selectors } from "../../selectors";
 
 const Messages = () => {
-  const activeChannelId = useSelector(selectors.activeChannelId);
-  const channel = useSelector((state) =>
-    channelsSelectors.selectById(state, activeChannelId)
-  );
-  const messages = useSelector(messagesSelectors.selectAll).filter(
+  const { data: channels } = useGetChannelsQuery();
+  const { data: allMessages } = useGetMessagesQuery();
+  const activeChannelId = useSelector(selectors.currentChannelId);
+
+  const channel = channels.find((channel) => activeChannelId === channel.id);
+  const messages = allMessages.filter(
     ({ channelId }) => channelId === activeChannelId
   );
-  
+
   const renderMessage = (message) => {
     return (
       <div className="text-break mb-2" key={message.id}>
@@ -24,7 +27,7 @@ const Messages = () => {
       <div className="d-flex flex-column h-100">
         <div className="bg-light mb-4 p-3 shadow-sm small">
           <p className="m-0">
-            <b># {channel ? channel.name : null}</b>
+            <b># {channel && channel.name}</b>
           </p>
           <span className="text-muted">{messages.length} сообщений</span>
         </div>

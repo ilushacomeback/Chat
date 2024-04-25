@@ -1,14 +1,20 @@
-import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./authSlice.js";
-import channelsReducer from "./channelsSlice.js";
-import messagesReducer from "./messagesSlice.js";
-import modalsReduces from "./modalsSlice.js";
+import { combineReducers } from "@reduxjs/toolkit";
+import auth, { actions as authActions } from "./authSlice";
+import ui, { actions as modalsActions } from "./uiSlice";
+import { channelsApi } from "../services/channelsApi";
+import { messagesApi } from "../services/messagesApi";
 
-export default configureStore({
-  reducer: {
-    authReducer,
-    channels: channelsReducer,
-    messages: messagesReducer,
-    modals: modalsReduces,
-  },
+
+const actions = {
+  ...authActions,
+  ...modalsActions,
+};
+
+export { actions };
+
+export default combineReducers({
+  auth,
+  ui,
+  [channelsApi.reducerPath]: channelsApi.reducer ,
+  [messagesApi.reducerPath]: messagesApi.reducer,
 });

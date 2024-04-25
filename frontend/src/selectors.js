@@ -1,12 +1,9 @@
-import { selectors as channelsSelectors} from "./slices/channelsSlice"
-import { selectors as messagesSelectors } from "./slices/messagesSlice"
-
 const selectors = {
-    auth: (state) => state.authReducer.auth,
-    token: (state) => state.authReducer.token,
-    errorAuth: (state) => state.authReducer.error,
-    activeChannelId: (state) => state.channels.activeChannelId,
-    modalChannel: (state) => state.modals.modalChannel
-}
+  token: (state) => state.auth.token,
+  username: (state) => state.auth.username,
+  modalChannel: (state) => state.ui.modalChannel,
+  currentChannelId: (state) => state.ui.activeChannelId,
+  defaultChannelId: (state) => state.ui.defaultChannelId
+};
 
-export { selectors, channelsSelectors, messagesSelectors }
+export { selectors };

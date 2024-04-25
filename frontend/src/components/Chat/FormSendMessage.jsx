@@ -1,24 +1,22 @@
-import axios from "axios";
 import { useFormik } from "formik";
 import { Form, Button, InputGroup } from "react-bootstrap";
+import { ArrowRightSquare } from "react-bootstrap-icons";
 import { useSelector } from "react-redux";
 import { selectors } from "../../selectors";
-import postMessage from "../../utils/postMessage";
-
+import { useAddMessageMutation } from "../../services/messagesApi";
 
 const FormSendMessage = () => {
-  const channelId = useSelector(selectors.activeChannelId);
-  const token = useSelector(selectors.token);
+  const [addMessage] = useAddMessageMutation();
+  const channelId = useSelector(selectors.currentChannelId);
+  const username = useSelector(selectors.username);
   const formik = useFormik({
     initialValues: {
       body: "",
     },
     onSubmit: ({ body }, { resetForm }) => {
-      const dataLocalStorage = localStorage.getItem("user");
-      const username = JSON.parse(dataLocalStorage).username;
       const data = { body, channelId, username };
-      postMessage(axios, token, data);
-      resetForm()
+      addMessage(data);
+      resetForm();
     },
   });
 
@@ -39,9 +37,10 @@ const FormSendMessage = () => {
         />
         <Button
           type="submit"
-          className="btn btn-group-vertical"
-          disabled={formik.values.body.length < 0}
+          variant="group-vertical"
+          disabled={formik.values.body.length < 1}
         >
+          <ArrowRightSquare size={20} />
           <span className="visually-hidden">Отправить</span>
         </Button>
       </InputGroup>

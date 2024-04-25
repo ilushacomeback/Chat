@@ -2,20 +2,19 @@ import cn from "classnames";
 import { Nav, ButtonGroup, Dropdown } from "react-bootstrap";
 import { PlusSquare } from "react-bootstrap-icons";
 import { useSelector, useDispatch } from "react-redux";
-import { selectors, channelsSelectors } from "../../selectors";
-import { actions as channelsActions } from "../../slices/channelsSlice";
-import { actions as modalsActions } from "../../slices/modalsSlice";
+import { useGetChannelsQuery } from "../../services/channelsApi";
+import { actions } from "../../slices/index";
+import { selectors } from "../../selectors";
 import ModalChannel from "./ModalChannel";
 
 const Channels = () => {
   const dispatch = useDispatch();
-  const { addChannel, setActive } = channelsActions;
-  const { toggleModalChannel } = modalsActions;
-  const channels = useSelector(channelsSelectors.selectAll);
-  const activeChannelId = useSelector(selectors.activeChannelId);
+  const activeChannelId = useSelector(selectors.currentChannelId);
+  const { setActive, toggleModalChannel } = actions;
+  const { data: channels } = useGetChannelsQuery();
 
   const handleActiveChannel = (id) => () => {
-    dispatch(setActive({ id }));
+    dispatch(setActive(id));
   };
 
   const renderDefaultChannel = (channel) => {

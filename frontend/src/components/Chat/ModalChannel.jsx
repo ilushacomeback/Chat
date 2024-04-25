@@ -1,24 +1,24 @@
-import axios from "axios";
 import { Modal, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { Form } from "react-bootstrap";
 import { useFormik } from "formik";
 import { selectors } from "../../selectors";
-import { actions as modalActions } from "../../slices/modalsSlice";
-import postChannel from "../../utils/postChannel";
+import { actions } from "../../slices/index";
+import { useAddChannelMutation } from "../../services/channelsApi";
 
 const ModalChannel = () => {
   const dispatch = useDispatch();
   const isOpen = useSelector(selectors.modalChannel);
-  const token = useSelector(selectors.token);
-  const { toggleModalChannel } = modalActions;
+  const { toggleModalChannel, setActive } = actions;
+  const [addChannel] = useAddChannelMutation();
 
   const formik = useFormik({
     initialValues: {
       name: "",
     },
     onSubmit: async ({ name }, { resetForm }) => {
-      await postChannel(axios, token, { name });
+      const response = await addChannel({ name });
+      dispatch(setActive(response.data.id))
       dispatch(toggleModalChannel({ isOpen: false }));
       resetForm();
     },

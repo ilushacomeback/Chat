@@ -3,17 +3,17 @@ import cn from "classnames";
 import { useFormik } from "formik";
 import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { actions as authActions } from "../../slices/authSlice";
-import { selectors } from "../../selectors";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { actions } from '../../slices/index';
 import getAuth from "../../utils/getAuth";
 import InvalidLogin from "./InvalidLogin";
 
 const FormLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const error = useSelector(selectors.errorAuth);
-  const { setAuth, setError, removeError } = authActions;
+  const [error, setError] = useState(false);
+  const { setAuth } = actions;
 
   const formik = useFormik({
     initialValues: {
@@ -23,14 +23,13 @@ const FormLogin = () => {
     onSubmit: (values) => {
       getAuth(axios, values)
         .then((data) => {
-          localStorage.setItem("user", JSON.stringify(data));
-          dispatch(removeError());
-          dispatch(setAuth({ token: data.token }));
+          setError(false);
+          dispatch(setAuth(data));
           return navigate("/");
         })
         .catch((e) => {
           console.log(e);
-          dispatch(setError());
+          setError(true);
         });
     },
   });
@@ -73,7 +72,7 @@ const FormLogin = () => {
           required
         />
         <Form.Label htmlFor="password">Пароль</Form.Label>
-        {error ? <InvalidLogin /> : null}
+        {error && <InvalidLogin />}
       </Form.Floating>
       <Button type="submit" className="w-100 mb-3" variant="outline-primary">
         Войти
