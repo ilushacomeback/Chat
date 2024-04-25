@@ -13,8 +13,9 @@ const uiSlice = createSlice({
     setActive(state, { payload }) {
       state.activeChannelId = payload
     },
-    toggleModalChannel(state, { payload: { isOpen } }) {
-      state.modalChannel = isOpen;
+    toggleModalChannel(state, { payload }) {
+      const { type, isOpen } = payload
+      state[type] = isOpen;
     },
   },
 });
