@@ -1,25 +1,45 @@
+import * as yup from "yup";
+import cn from "classnames";
 import { Modal, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { Form } from "react-bootstrap";
 import { useFormik } from "formik";
 import { selectors } from "../../selectors";
 import { actions } from "../../slices/index";
-import { useAddChannelMutation } from "../../services/channelsApi";
+import {
+  useAddChannelMutation,
+  useGetChannelsQuery,
+} from "../../services/channelsApi";
 
-const ModalChannel = () => {
+const getValidateSchema = (channels) =>
+  yup.object().shape({
+    name: yup
+      .string()
+      .required()
+      .trim()
+      .min(3, "От 3 до 20 символов")
+      .max(20, "От 3 до 20 символов")
+      .notOneOf(channels, "Должно быть уникальным"),
+  });
+
+const Modals = () => {
   const dispatch = useDispatch();
   const isOpen = useSelector(selectors.modalChannel);
   const { toggleModalChannel, setActive } = actions;
   const [addChannel] = useAddChannelMutation();
+  const { data: channels } = useGetChannelsQuery();
+  const names = channels.map(({ name }) => name)
 
   const formik = useFormik({
     initialValues: {
       name: "",
     },
+    validationSchema: getValidateSchema(names),
+    validateOnChange: false,
     onSubmit: async ({ name }, { resetForm }) => {
       const response = await addChannel({ name });
       dispatch(setActive(response.data.id));
-      dispatch(toggleModalChannel({ isOpen: false }));
+      dispatch(toggleModalChannel({ isOpen: false, type: "modalChannel" }));
       resetForm();
     },
   });
@@ -32,7 +52,11 @@ const ModalChannel = () => {
           as="button"
           aria-label="Close"
           className="btn btn-close"
-          onClick={() => dispatch(toggleModalChannel({ isOpen: false }))}
+          onClick={() =>
+            dispatch(
+              toggleModalChannel({ isOpen: false, type: "modalChannel" })
+            )
+          }
         />
       </Modal.Header>
       <Modal.Body>
@@ -40,13 +64,18 @@ const ModalChannel = () => {
           <Form.Control
             as="input"
             id="name"
-            className="mb-2"
+            className={cn("mb-2", { "is-invalid": formik.errors.name && formik.touched.name })}
             value={formik.values.name}
             onChange={formik.handleChange}
           />
           <Form.Label className="visually-hidden" htmlFor="name">
             Имя канала
           </Form.Label>
+          <div className="invalid-feedback">
+            {formik.errors.name && formik.touched.name
+              ? formik.errors.name
+              : null}
+          </div>
           <div className="d-flex justify-content-end">
             <Button
               as="button"
@@ -65,4 +94,4 @@ const ModalChannel = () => {
   );
 };
 
-export default ModalChannel;
+export default Modals;

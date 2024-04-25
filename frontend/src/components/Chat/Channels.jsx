@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useGetChannelsQuery } from "../../services/channelsApi";
 import { actions } from "../../slices/index";
 import { selectors } from "../../selectors";
-import ModalChannel from "./ModalChannel";
+import Modals from "./Modals";
 
 const Channels = () => {
   const dispatch = useDispatch();
@@ -84,7 +84,7 @@ const Channels = () => {
             as="button"
             className="p-0 text-primary btn btn-group-vertical"
             onClick={() => {
-              dispatch(toggleModalChannel({ isOpen: true }));
+              dispatch(toggleModalChannel({ type: 'modalChannel', isOpen: true }));
             }}
           >
             <PlusSquare size={20} />
@@ -103,7 +103,7 @@ const Channels = () => {
           )}
         </Nav>
       </div>
-      <ModalChannel />
+      <Modals />
     </>
   );
 };
