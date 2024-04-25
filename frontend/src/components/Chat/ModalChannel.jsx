@@ -18,7 +18,7 @@ const ModalChannel = () => {
     },
     onSubmit: async ({ name }, { resetForm }) => {
       const response = await addChannel({ name });
-      dispatch(setActive(response.data.id))
+      dispatch(setActive(response.data.id));
       dispatch(toggleModalChannel({ isOpen: false }));
       resetForm();
     },
@@ -48,7 +48,11 @@ const ModalChannel = () => {
             Имя канала
           </Form.Label>
           <div className="d-flex justify-content-end">
-            <Button as="button" className="me-2 btn btn-secondary">
+            <Button
+              as="button"
+              className="me-2 btn btn-secondary"
+              onClick={() => dispatch(toggleModalChannel({ isOpen: false }))}
+            >
               Отменить
             </Button>
             <Button type="submit" className="btn btn-primary">
