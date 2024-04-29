@@ -75,9 +75,7 @@ const ModalChannel = ({ toggleModalChannel }) => {
             Имя канала
           </Form.Label>
           <div className="invalid-feedback">
-            {formik.errors.name && formik.touched.name
-              ? formik.errors.name
-              : null}
+            {formik.touched.name && formik.errors.name}
           </div>
           <div className="d-flex justify-content-end">
             <Button

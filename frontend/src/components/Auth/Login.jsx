@@ -1,7 +1,6 @@
 import FormLogin from "./FormLogin";
 
 const Login = () => {
-  
   return (
     <div className="container-fluid h-100">
       <div className="row justify-content-center align-content-center h-100">

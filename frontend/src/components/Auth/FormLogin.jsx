@@ -42,8 +42,6 @@ const FormLogin = () => {
     <Form
       onSubmit={formik.handleSubmit}
       className="col-12 col-md-6 mt-3 mt-mb-0"
-      action="/login"
-      method="post"
     >
       <h1 className="text-center mb-4">Войти</h1>
 

@@ -2,6 +2,7 @@ import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectors } from "../selectors";
 import Login from "./Auth/Login";
+import Signup from "./Auth/Signup";
 import ErrorPage from "./ErrorPage";
 import Navbar from "./Navbar";
 import ChatBox from "./Chat/ChatBox";
@@ -17,9 +18,10 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<PrivateChat />}>
+        <Route exact path="/" element={<PrivateChat />}>
           <Route path="" element={<ChatBox />} />
         </Route>
+        <Route path="/signup" element={<Signup />}></Route>
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </div>

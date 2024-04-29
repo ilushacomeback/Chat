@@ -12,9 +12,11 @@ export const channelsApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ["Channels", "Messages"],
   endpoints: (builder) => ({
     getChannels: builder.query({
       query: () => "",
+      providesTags: ["Channels"]
     }),
     addChannel: builder.mutation({
       query: (channel) => ({
@@ -27,6 +29,7 @@ export const channelsApi = createApi({
         method: "DELETE",
         url: `/${id}`,
       }),
+      invalidatesTags: ["Channels", "Messages"]
     }),
     renameChannel: builder.mutation({
       query: ({ id, name }) => ({

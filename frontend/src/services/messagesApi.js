@@ -12,9 +12,11 @@ export const messagesApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ["Messages"],
   endpoints: (builder) => ({
     getMessages: builder.query({
       query: () => "",
+      providesTags: ["Messages"]
     }),
     addMessage: builder.mutation({
       query: (message) => ({
