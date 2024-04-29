@@ -5,8 +5,10 @@ import { useGetChannelsQuery } from "../../services/channelsApi";
 import { selectors } from "../../selectors";
 
 const Messages = () => {
-  const { data: channels } = useGetChannelsQuery();
-  const { data: allMessages } = useGetMessagesQuery();
+  const { data: channels, isLoading: isLoadingChannels } =
+    useGetChannelsQuery();
+  const { data: allMessages, isLoading: isLoadingMessages } =
+    useGetMessagesQuery();
   const activeChannelId = useSelector(selectors.currentChannelId);
 
   const channel = channels.find((channel) => activeChannelId === channel.id);
@@ -22,7 +24,7 @@ const Messages = () => {
     );
   };
 
-  return (
+  return isLoadingChannels || isLoadingMessages ? null : (
     <div className="col p-0 h-100">
       <div className="d-flex flex-column h-100">
         <div className="bg-light mb-4 p-3 shadow-sm small">

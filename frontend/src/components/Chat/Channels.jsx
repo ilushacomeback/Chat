@@ -11,10 +11,20 @@ const Channels = () => {
   const dispatch = useDispatch();
   const activeChannelId = useSelector(selectors.currentChannelId);
   const { setActive, toggleModalChannel } = actions;
-  const { data: channels } = useGetChannelsQuery();
+  const { data: channels, isLoading } = useGetChannelsQuery();
 
   const handleActiveChannel = (id) => () => {
     dispatch(setActive(id));
+  };
+
+  const handleOpen = (id, type) => {
+    dispatch(
+      toggleModalChannel({
+        isOpen: true,
+        type,
+        id,
+      })
+    );
   };
 
   const renderDefaultChannel = (channel) => {
@@ -63,10 +73,18 @@ const Channels = () => {
             <span className="visually-hidden">Управление каналом</span>
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item role="button" href="#">
+            <Dropdown.Item
+              role="button"
+              href="#"
+              onClick={() => handleOpen(channel.id, "modalRemoveChannel")}
+            >
               Удалить
             </Dropdown.Item>
-            <Dropdown.Item role="button" href="#">
+            <Dropdown.Item
+              role="button"
+              href="#"
+              onClick={() => handleOpen(channel.id, "modalRenameChannel")}
+            >
               Переименовать
             </Dropdown.Item>
           </Dropdown.Menu>
@@ -75,7 +93,7 @@ const Channels = () => {
     );
   };
 
-  return (
+  return isLoading ? null : (
     <>
       <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
         <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
@@ -84,7 +102,9 @@ const Channels = () => {
             as="button"
             className="p-0 text-primary btn btn-group-vertical"
             onClick={() => {
-              dispatch(toggleModalChannel({ type: 'modalChannel', isOpen: true }));
+              dispatch(
+                toggleModalChannel({ type: "modalChannel", isOpen: true })
+              );
             }}
           >
             <PlusSquare size={20} />

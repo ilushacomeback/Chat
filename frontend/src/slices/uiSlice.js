@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  activeChannelId: '1',
-  defaultChannelId: '1',
-  modalChannel: false,
+  activeChannelId: "1",
+  defaultChannelId: "1",
+  currentModal: null,
+  isOpen: false,
+  idTouchChannel: null
 };
 
 const uiSlice = createSlice({
@@ -11,11 +13,13 @@ const uiSlice = createSlice({
   initialState,
   reducers: {
     setActive(state, { payload }) {
-      state.activeChannelId = payload
+      state.activeChannelId = payload;
     },
     toggleModalChannel(state, { payload }) {
-      const { type, isOpen } = payload
-      state[type] = isOpen;
+      const { type, isOpen, id } = payload;
+      state.currentModal = type;
+      state.isOpen = isOpen;
+      state.idTouchChannel = id ? id : state.idTouchChannel 
     },
   },
 });

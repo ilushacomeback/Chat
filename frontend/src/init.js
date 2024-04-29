@@ -25,6 +25,7 @@ const init = async () => {
       })
     );
   });
+
   socket.on("newChannel", (payload) => {
     store.dispatch(
       channelsApi.util.updateQueryData("getChannels", undefined, (channels) => {
@@ -32,6 +33,31 @@ const init = async () => {
       })
     );
   });
+
+  socket.on("removeChannel", ({ id }) => {
+    store.dispatch(
+      channelsApi.util.updateQueryData("getChannels", undefined, (channels) => {
+        const filteredChannels = channels.filter(
+          (channel) => channel.id !== id
+        );
+        const currentChannelId = store.getState().ui.activeChannelId;
+        const defaultChannel = store.getState().ui.defaultChannelId;
+        if (currentChannelId === id) {
+          store.dispatch(actions.setActive(defaultChannel));
+        }
+        return filteredChannels;
+      })
+    );
+  });
+
+  socket.on("renameChannel", (payload) => {
+    store.dispatch(
+      channelsApi.util.updateQueryData("getChannels", undefined, (channels) => {
+        const index = channels.findIndex((channel) => channel.id === payload.id)
+        channels[index] = payload
+      })
+    )
+  })
 
   return (
     <React.StrictMode>
