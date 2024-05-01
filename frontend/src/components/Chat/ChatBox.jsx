@@ -11,9 +11,9 @@ const ChatBox = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleRemoveAuth = () => {
+  const handleRemoveAuth = (path) => {
     dispatch(removeAuth());
-    navigate("/signup");
+    navigate(path);
   };
 
   const { isLoading: isChannelsLoad, isError: errorChannels } =
@@ -28,10 +28,10 @@ const ChatBox = () => {
       <div className="text-center">
         <h1 className="h4 text-muted">Видимо ваш аккаунт удален, простите</h1>
         <div className="d-flex justify-content-center">
-          <button onClick={() => navigate("/")} className="btn btn-danger">
-            Попробовать зайти снова (не получится)
+          <button onClick={() => handleRemoveAuth("/login")} className="btn btn-danger">
+            Попробовать зайти снова
           </button>
-          <button onClick={handleRemoveAuth} className="btn btn-primary">
+          <button onClick={() => handleRemoveAuth("/signup")} className="btn btn-primary">
             Зарегистрироваться
           </button>
         </div>
