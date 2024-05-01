@@ -4,41 +4,43 @@ import cn from "classnames";
 import { useFormik } from "formik";
 import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { actions } from "../../slices/index";
 
-const getValidateSchema = () => {
+const getValidateSchema = (t) => {
   return yup.object().shape({
     username: yup
       .string()
-      .required("Обязательное поле")
+      .required(t("errors.required"))
       .trim()
-      .min(3, "От 3 до 20 символов")
-      .max(20, "От 3 до 20 символов"),
+      .min(3, t("errors.minMax"))
+      .max(20, t("errors.minMax")),
     password: yup
       .string()
-      .required("Обязательно поле")
+      .required(t("errors.required"))
       .trim()
-      .min(6, "Не менее 6 символов"),
-    validPassword: yup
+      .min(6, t("errors.minPassword")),
+    confirmPassword: yup
       .string()
-      .oneOf([yup.ref("password")], "Пароли должны совпадать"),
+      .oneOf([yup.ref("password")], t("errors.mismatchPassword")),
   });
 };
 
 const FormSignup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { setAuth } = actions;
   const [error, setError] = useState(false);
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
-      validPassword: "",
+      confirmPassword: "",
     },
-    validationSchema: getValidateSchema(),
+    validationSchema: getValidateSchema(t),
     validateOnChange: false,
     onSubmit: ({ username, password }) => {
       axios
@@ -58,22 +60,24 @@ const FormSignup = () => {
 
   return (
     <Form onSubmit={formik.handleSubmit} className="w-50" noValidate>
-      <h1 className="text-center mb-4">Войти</h1>
-
+      <h1 className="text-center mb-4">{t("login")}</h1>
       <Form.Floating className="mb-3">
         <Form.Control
           className={cn({
-            "is-invalid": (formik.touched.username && formik.errors.username) || error,
+            "is-invalid":
+              (formik.touched.username && formik.errors.username) || error,
           })}
           type="text"
           name="username"
           id="username"
-          placeholder="Имя пользователя"
+          placeholder={t("registrationPage.username")}
           onChange={formik.handleChange}
           value={formik.values.username}
           required
         />
-        <Form.Label htmlFor="username">Ваш ник</Form.Label>
+        <Form.Label htmlFor="username">
+          {t("registrationPage.username")}
+        </Form.Label>
         <div className="invalid-tooltip">
           {formik.touched.username && formik.errors.username}
         </div>
@@ -81,17 +85,18 @@ const FormSignup = () => {
       <Form.Floating className="mb-4">
         <Form.Control
           className={cn({
-            "is-invalid": (formik.touched.password && formik.errors.password || error),
+            "is-invalid":
+              (formik.touched.password && formik.errors.password) || error,
           })}
           type="password"
           name="password"
           id="password"
-          placeholder="Пароль"
+          placeholder={t("password")}
           onChange={formik.handleChange}
           value={formik.values.password}
           required
         />
-        <Form.Label htmlFor="password">Пароль</Form.Label>
+        <Form.Label htmlFor="password">{t("password")}</Form.Label>
         <div className="invalid-tooltip">
           {formik.touched.password && formik.errors.password}
         </div>
@@ -100,28 +105,30 @@ const FormSignup = () => {
         <Form.Control
           className={cn({
             "is-invalid":
-              (formik.touched.validPassword && formik.errors.validPassword) || error
+              (formik.touched.confirmPassword &&
+                formik.errors.confirmPassword) ||
+              error,
           })}
           type="password"
-          name="validPassword"
-          id="validPassword"
-          placeholder="Подвердите пароль"
+          name="confirmPassword"
+          id="confirmPassword"
+          placeholder={t("registrationPage.confirmPassword")}
           onChange={formik.handleChange}
-          value={formik.values.validPassword}
+          value={formik.values.confirmPassword}
           required
         />
         {error && (
-          <div className="invalid-tooltip">
-            Такой пользователь уже существует
-          </div>
+          <div className="invalid-tooltip">{t("errors.notUniqUsername")}</div>
         )}
-        <Form.Label htmlFor="validPassword">Подвердите пароль</Form.Label>
+        <Form.Label htmlFor="confirmPassword">
+          {t("registrationPage.confirmPassword")}
+        </Form.Label>
         <div className="invalid-tooltip">
-          {formik.touched.validPassword && formik.errors.validPassword}
+          {formik.touched.confirmPassword && formik.errors.confirmPassword}
         </div>
       </Form.Floating>
       <Button type="submit" className="w-100 mb-3" variant="outline-primary">
-        Войти
+        {t("login")}
       </Button>
     </Form>
   );

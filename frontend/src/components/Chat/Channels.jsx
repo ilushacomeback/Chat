@@ -2,6 +2,7 @@ import cn from "classnames";
 import { Nav, ButtonGroup, Dropdown } from "react-bootstrap";
 import { PlusSquare } from "react-bootstrap-icons";
 import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { useGetChannelsQuery } from "../../services/channelsApi";
 import { actions } from "../../slices/index";
 import { selectors } from "../../selectors";
@@ -9,6 +10,7 @@ import Modals from "./Modals";
 
 const Channels = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const activeChannelId = useSelector(selectors.currentChannelId);
   const { setActive, toggleModalChannel } = actions;
   const { data: channels, isLoading } = useGetChannelsQuery();
@@ -70,7 +72,9 @@ const Channels = () => {
               "btn-secondary": channel.id === activeChannelId,
             })}
           >
-            <span className="visually-hidden">Управление каналом</span>
+            <span className="visually-hidden">
+              {t("chatPage.controlChannel")}
+            </span>
           </Dropdown.Toggle>
           <Dropdown.Menu>
             <Dropdown.Item
@@ -78,14 +82,14 @@ const Channels = () => {
               href="#"
               onClick={() => handleOpen(channel.id, "modalRemoveChannel")}
             >
-              Удалить
+              {t("modals.delete")}
             </Dropdown.Item>
             <Dropdown.Item
               role="button"
               href="#"
               onClick={() => handleOpen(channel.id, "modalRenameChannel")}
             >
-              Переименовать
+              {t("modals.rename")}
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>

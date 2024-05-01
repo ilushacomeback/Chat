@@ -1,11 +1,13 @@
 import { useFormik } from "formik";
 import { Form, Button, InputGroup } from "react-bootstrap";
 import { ArrowRightSquare } from "react-bootstrap-icons";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { selectors } from "../../selectors";
 import { useAddMessageMutation } from "../../services/messagesApi";
 
 const FormSendMessage = () => {
+  const { t } = useTranslation();
   const [addMessage] = useAddMessageMutation();
   const channelId = useSelector(selectors.currentChannelId);
   const username = useSelector(selectors.username);
@@ -30,7 +32,7 @@ const FormSendMessage = () => {
         <Form.Control
           name="body"
           aria-label="Новое сообщение"
-          placeholder="Введите сообщение..."
+          placeholder={t("chatPage.enterMessage")}
           className="border-0 p-0 ps-2 form-control"
           onChange={formik.handleChange}
           value={formik.values.body}
@@ -41,7 +43,7 @@ const FormSendMessage = () => {
           disabled={formik.values.body.length < 1}
         >
           <ArrowRightSquare size={20} />
-          <span className="visually-hidden">Отправить</span>
+          <span className="visually-hidden">{t("send")}</span>
         </Button>
       </InputGroup>
     </Form>

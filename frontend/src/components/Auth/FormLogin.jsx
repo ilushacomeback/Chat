@@ -3,15 +3,16 @@ import cn from "classnames";
 import { useFormik } from "formik";
 import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { actions } from '../../slices/index';
+import { actions } from "../../slices/index";
 import getAuth from "../../utils/getAuth";
-import InvalidLogin from "./InvalidLogin";
 
 const FormLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [error, setError] = useState(false);
   const { setAuth } = actions;
 
@@ -43,20 +44,19 @@ const FormLogin = () => {
       onSubmit={formik.handleSubmit}
       className="col-12 col-md-6 mt-3 mt-mb-0"
     >
-      <h1 className="text-center mb-4">Войти</h1>
-
+      <h1 className="text-center mb-4">{t("login")}</h1>
       <Form.Floating className="mb-3">
         <Form.Control
           className={classesForFormControl}
           type="text"
           name="username"
           id="username"
-          placeholder="Ваш ник"
+          placeholder={t("loginPage.username")}
           onChange={formik.handleChange}
           value={formik.values.username}
           required
         />
-        <label htmlFor="username">Ваш ник</label>
+        <label htmlFor="username">{t("loginPage.username")}</label>
       </Form.Floating>
       <Form.Floating className="mb-4">
         <Form.Control
@@ -64,16 +64,18 @@ const FormLogin = () => {
           type="password"
           name="password"
           id="password"
-          placeholder="Пароль"
+          placeholder={t("password")}
           onChange={formik.handleChange}
           value={formik.values.password}
           required
         />
-        <Form.Label htmlFor="password">Пароль</Form.Label>
-        {error && <InvalidLogin />}
+        <Form.Label htmlFor="password">{t("password")}</Form.Label>
+        {error && (
+          <div className="invalid-tooltip">{t("errors.invalidLogin")}</div>
+        )}
       </Form.Floating>
       <Button type="submit" className="w-100 mb-3" variant="outline-primary">
-        Войти
+        {t("login")}
       </Button>
     </Form>
   );

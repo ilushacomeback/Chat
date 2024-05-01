@@ -1,8 +1,8 @@
 import * as yup from "yup";
 import cn from "classnames";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
-import { Form } from "react-bootstrap";
 import { useFormik } from "formik";
 import { selectors } from "../../selectors";
 import { actions } from "../../slices/index";
@@ -13,18 +13,19 @@ import {
   useRenameChannelMutation,
 } from "../../services/channelsApi";
 
-const getValidateSchema = (channels) =>
+const getValidateSchema = (channels, t) =>
   yup.object().shape({
     name: yup
       .string()
-      .required()
+      .required(t("errors.required"))
       .trim()
-      .min(3, "От 3 до 20 символов")
-      .max(20, "От 3 до 20 символов")
-      .notOneOf(channels, "Должно быть уникальным"),
+      .min(3, t("errors.minMax"))
+      .max(20, t("errors.minMax"))
+      .notOneOf(channels, t("errors.notUniqNamesChannels")),
   });
 
 const ModalChannel = ({ toggleModalChannel }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { setActive } = actions;
   const [addChannel] = useAddChannelMutation();
@@ -35,7 +36,7 @@ const ModalChannel = ({ toggleModalChannel }) => {
     initialValues: {
       name: "",
     },
-    validationSchema: getValidateSchema(names),
+    validationSchema: getValidateSchema(names, t),
     validateOnChange: false,
     onSubmit: async ({ name }, { resetForm }) => {
       const response = await addChannel({ name });
@@ -48,7 +49,7 @@ const ModalChannel = ({ toggleModalChannel }) => {
   return (
     <>
       <Modal.Header>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>{t("modals.addChannel")}</Modal.Title>
         <Button
           as="button"
           aria-label="Close"
@@ -72,7 +73,7 @@ const ModalChannel = ({ toggleModalChannel }) => {
             onChange={formik.handleChange}
           />
           <Form.Label className="visually-hidden" htmlFor="name">
-            Имя канала
+            {t("modals.nameChannel")}
           </Form.Label>
           <div className="invalid-feedback">
             {formik.touched.name && formik.errors.name}
@@ -87,10 +88,10 @@ const ModalChannel = ({ toggleModalChannel }) => {
                 )
               }
             >
-              Отменить
+              {t("modals.cancel")}
             </Button>
             <Button type="submit" className="btn btn-primary">
-              Отправить
+              {t("send")}
             </Button>
           </div>
         </Form>
@@ -101,6 +102,7 @@ const ModalChannel = ({ toggleModalChannel }) => {
 
 const ModalRemoveChannel = ({ toggleModalChannel }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [removeChannel] = useRemoveChannelMutation();
   const idTouchChannel = useSelector(selectors.idTouchChannel);
 
@@ -116,7 +118,7 @@ const ModalRemoveChannel = ({ toggleModalChannel }) => {
   return (
     <>
       <Modal.Header>
-        <Modal.Title>Удалить канал</Modal.Title>
+        <Modal.Title>{t("modals.removeChannel")}</Modal.Title>
         <Button
           as="button"
           aria-label="Close"
@@ -125,21 +127,21 @@ const ModalRemoveChannel = ({ toggleModalChannel }) => {
         />
       </Modal.Header>
       <Modal.Body>
-        <p className="lead">Уверены?</p>
+        <p className="lead">{t("modals.sure")}</p>
         <div className="d-flex justify-content-end">
           <Button
             as="button"
             className="me-2 btn btn-secondary"
             onClick={closeModal}
           >
-            Отменить
+            {t("modals.cancel")}
           </Button>
           <Button
             type="submit"
             className="btn btn-danger"
             onClick={handleRemove}
           >
-            Удалить
+            {t("modals.delete")}
           </Button>
         </div>
       </Modal.Body>
@@ -149,6 +151,7 @@ const ModalRemoveChannel = ({ toggleModalChannel }) => {
 
 const ModalRenameChannel = ({ toggleModalChannel }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const idTouchChannel = useSelector(selectors.idTouchChannel);
   const [renameChannel] = useRenameChannelMutation();
   const { data: channels } = useGetChannelsQuery();
@@ -163,7 +166,7 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
       name: "",
       id: idTouchChannel,
     },
-    validationSchema: getValidateSchema(names),
+    validationSchema: getValidateSchema(names, t),
     validateOnChange: false,
     onSubmit: async ({ name, id }, { resetForm }) => {
       await renameChannel({ name, id });
@@ -175,7 +178,7 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
   return (
     <>
       <Modal.Header>
-        <Modal.Title>Переименовать канал</Modal.Title>
+        <Modal.Title>{t("modals.renameChannel")}</Modal.Title>
         <Button
           as="button"
           aria-label="Close"
@@ -195,7 +198,7 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
             onChange={formik.handleChange}
           />
           <Form.Label className="visually-hidden" htmlFor="name">
-            Имя канала
+            {t("modals.nameChannel")}
           </Form.Label>
           <div className="invalid-feedback">
             {formik.errors.name && formik.touched.name
@@ -208,10 +211,10 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
               className="me-2 btn btn-secondary"
               onClick={сloseModal}
             >
-              Отменить
+              {t("modals.cancel")}
             </Button>
             <Button type="submit" className="btn btn-primary">
-              Отправить
+              {t("send")}
             </Button>
           </div>
         </Form>

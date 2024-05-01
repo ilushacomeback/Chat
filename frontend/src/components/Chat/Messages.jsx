@@ -1,10 +1,13 @@
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import FormSendMessage from "./FormSendMessage";
 import { useGetMessagesQuery } from "../../services/messagesApi";
 import { useGetChannelsQuery } from "../../services/channelsApi";
 import { selectors } from "../../selectors";
 
 const Messages = () => {
+  const { t } = useTranslation();
+
   const { data: channels, isLoading: isLoadingChannels } =
     useGetChannelsQuery();
   const { data: allMessages, isLoading: isLoadingMessages } =
@@ -31,7 +34,9 @@ const Messages = () => {
           <p className="m-0">
             <b># {channel && channel.name}</b>
           </p>
-          <span className="text-muted">{messages.length} сообщений</span>
+          <span className="text-muted">
+            {t("chatPage.messages", { count: messages.length })}
+          </span>
         </div>
         <div className="chat-messages overflow-auto px-5 ">
           {messages.map(renderMessage)}
