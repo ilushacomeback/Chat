@@ -1,6 +1,7 @@
 import * as yup from "yup";
 import cn from "classnames";
 import { Modal, Button, Form } from "react-bootstrap";
+import { useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { useFormik } from "formik";
@@ -27,6 +28,7 @@ const getValidateSchema = (channels, t) =>
 const ModalChannel = ({ toggleModalChannel }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const input = useRef();
   const { setActive } = actions;
   const [addChannel] = useAddChannelMutation();
   const { data: channels } = useGetChannelsQuery();
@@ -44,6 +46,10 @@ const ModalChannel = ({ toggleModalChannel }) => {
       dispatch(toggleModalChannel({ isOpen: false, type: "modalChannel" }));
       resetForm();
     },
+  });
+
+  useEffect(() => {
+    input.current.focus();
   });
 
   return (
@@ -70,6 +76,7 @@ const ModalChannel = ({ toggleModalChannel }) => {
               "is-invalid": formik.errors.name && formik.touched.name,
             })}
             value={formik.values.name}
+            ref={input}
             onChange={formik.handleChange}
           />
           <Form.Label className="visually-hidden" htmlFor="name">
@@ -152,10 +159,12 @@ const ModalRemoveChannel = ({ toggleModalChannel }) => {
 const ModalRenameChannel = ({ toggleModalChannel }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const input = useRef();
   const idTouchChannel = useSelector(selectors.idTouchChannel);
   const [renameChannel] = useRenameChannelMutation();
   const { data: channels } = useGetChannelsQuery();
   const names = channels.map(({ name }) => name);
+  const currentChannel = channels.find(({ id }) => id === idTouchChannel)
 
   const сloseModal = () => {
     dispatch(toggleModalChannel({ isOpen: false, type: "modalRenameChannel" }));
@@ -163,7 +172,7 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
 
   const formik = useFormik({
     initialValues: {
-      name: "",
+      name: currentChannel.name,
       id: idTouchChannel,
     },
     validationSchema: getValidateSchema(names, t),
@@ -173,6 +182,10 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
       сloseModal();
       resetForm();
     },
+  });
+
+  useEffect(() => {
+    input.current.select();
   });
 
   return (
@@ -195,6 +208,7 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
               "is-invalid": formik.errors.name && formik.touched.name,
             })}
             value={formik.values.name}
+            ref={input}
             onChange={formik.handleChange}
           />
           <Form.Label className="visually-hidden" htmlFor="name">

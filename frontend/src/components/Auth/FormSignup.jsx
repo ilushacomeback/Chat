@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { actions } from "../../slices/index";
 
@@ -34,6 +34,7 @@ const FormSignup = () => {
   const { t } = useTranslation();
   const { setAuth } = actions;
   const [error, setError] = useState(false);
+  const input = useRef();
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -58,6 +59,10 @@ const FormSignup = () => {
     },
   });
 
+  useEffect(() => {
+    input.current.focus();
+  }, []);
+
   return (
     <Form onSubmit={formik.handleSubmit} className="w-50" noValidate>
       <h1 className="text-center mb-4">{t("login")}</h1>
@@ -73,6 +78,7 @@ const FormSignup = () => {
           placeholder={t("registrationPage.username")}
           onChange={formik.handleChange}
           value={formik.values.username}
+          ref={input}
           required
         />
         <Form.Label htmlFor="username">
