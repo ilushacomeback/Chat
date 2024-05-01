@@ -50,7 +50,7 @@ const ModalChannel = ({ toggleModalChannel }) => {
 
   useEffect(() => {
     input.current.focus();
-  });
+  }, []);
 
   return (
     <>
@@ -164,7 +164,7 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
   const [renameChannel] = useRenameChannelMutation();
   const { data: channels } = useGetChannelsQuery();
   const names = channels.map(({ name }) => name);
-  const currentChannel = channels.find(({ id }) => id === idTouchChannel)
+  const currentChannel = channels.find(({ id }) => id === idTouchChannel);
 
   const сloseModal = () => {
     dispatch(toggleModalChannel({ isOpen: false, type: "modalRenameChannel" }));
@@ -186,7 +186,7 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
 
   useEffect(() => {
     input.current.select();
-  });
+  }, []);
 
   return (
     <>
