@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { actions } from "../../slices/index";
 import Channels from "./Channels";
 import Messages from "./Messages";
@@ -8,9 +9,10 @@ import { useGetMessagesQuery } from "../../services/messagesApi";
 const ChatBox = () => {
   const { removeAuth } = actions;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleRemoveAuth = () => {
-    removeAuth();
+    dispatch(removeAuth());
     navigate("/signup");
   };
 
@@ -27,9 +29,9 @@ const ChatBox = () => {
         <h1 className="h4 text-muted">Видимо ваш аккаунт удален, простите</h1>
         <div className="d-flex justify-content-center">
           <button onClick={() => navigate("/")} className="btn btn-danger">
-            Попробовать зайти снова
+            Попробовать зайти снова (не получится)
           </button>
-          <button onClick={handleRemoveAuth} className="btn">
+          <button onClick={handleRemoveAuth} className="btn btn-primary">
             Зарегистрироваться
           </button>
         </div>
