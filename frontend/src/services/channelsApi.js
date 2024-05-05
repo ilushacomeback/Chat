@@ -4,8 +4,8 @@ export const channelsApi = createApi({
   reducerPath: "channelsApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "/api/v1/channels",
-    prepareHeaders: (headers) => {
-      const { token } = JSON.parse(localStorage.getItem("user"))
+    prepareHeaders: (headers, { getState }) => {
+      const { token } = getState().auth;
       headers.set("Authorization", `Bearer ${token}`);
       return headers;
     },
@@ -14,7 +14,7 @@ export const channelsApi = createApi({
   endpoints: (builder) => ({
     getChannels: builder.query({
       query: () => "",
-      providesTags: ["Channels"]
+      providesTags: ["Channels"],
     }),
     addChannel: builder.mutation({
       query: (channel) => ({
@@ -27,13 +27,13 @@ export const channelsApi = createApi({
         method: "DELETE",
         url: `/${id}`,
       }),
-      invalidatesTags: ["Channels", "Messages"]
+      invalidatesTags: ["Channels", "Messages"],
     }),
     renameChannel: builder.mutation({
       query: ({ id, name }) => ({
         method: "PATCH",
         url: `/${id}`,
-        body: { name }
+        body: { name },
       }),
     }),
   }),

@@ -9,6 +9,7 @@ import { BrowserRouter } from "react-router-dom";
 import reducer, { actions } from "./slices/index.js";
 import { channelsApi } from "./services/channelsApi.js";
 import { messagesApi } from "./services/messagesApi.js";
+import { authApi } from "./services/authApi.js";
 import App from "./components/App.jsx";
 
 const init = async () => {
@@ -18,6 +19,7 @@ const init = async () => {
       getDefaultMiddleware().concat([
         channelsApi.middleware,
         messagesApi.middleware,
+        authApi.middleware,
       ]),
   });
 

@@ -1,4 +1,3 @@
-import axios from "axios";
 import * as yup from "yup";
 import cn from "classnames";
 import { useFormik } from "formik";
@@ -8,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { actions } from "../../slices/index";
+import { useSignupMutation } from "../../services/authApi";
 
 const getValidateSchema = (t) => {
   return yup.object().shape({
@@ -29,6 +29,7 @@ const getValidateSchema = (t) => {
 };
 
 const FormSignup = () => {
+  const [signup] = useSignupMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -43,19 +44,20 @@ const FormSignup = () => {
     },
     validationSchema: getValidateSchema(t),
     validateOnChange: false,
-    onSubmit: ({ username, password }) => {
-      axios
-        .post("/api/v1/signup", { username, password })
-        .then((response) => {
-          dispatch(setAuth(response.data));
-          navigate("/");
-        })
-        .catch((e) => {
-          console.log(e.response.status);
-          if (e.response.status === 409) {
-            setError(true);
-          }
-        });
+    onSubmit: async (values) => {
+      try {
+        const response = await signup(values);
+        if (response?.error?.status === 409) {
+          throw new Error("notUniqUsername");
+        }
+        dispatch(setAuth(response.data));
+        navigate("/");
+      } catch (e) {
+        console.log(e)
+        if (e.message === "notUniqUsername") {
+          setError(true);
+        }
+      }
     },
   });
 

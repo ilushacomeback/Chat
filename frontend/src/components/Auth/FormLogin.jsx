@@ -1,4 +1,3 @@
-import axios from "axios";
 import cn from "classnames";
 import { useFormik } from "formik";
 import { Form, Button } from "react-bootstrap";
@@ -7,12 +6,17 @@ import { useTranslation } from "react-i18next";
 import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { actions } from "../../slices/index";
-import getAuth from "../../utils/getAuth";
+import { useGetAuthMutation } from "../../services/authApi";
+import { useGetChannelsQuery } from "../../services/channelsApi";
+import { useGetMessagesQuery } from "../../services/messagesApi";
 
 const FormLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const [getAuth] = useGetAuthMutation();
+  const { refetch: refetchChannels } = useGetChannelsQuery();
+  const { refetch: refetchMessages } = useGetMessagesQuery();
   const [error, setError] = useState(false);
   const input = useRef();
   const { setAuth } = actions;
@@ -22,17 +26,23 @@ const FormLogin = () => {
       username: "",
       password: "",
     },
-    onSubmit: (values) => {
-      getAuth(axios, values)
-        .then((data) => {
-          setError(false);
-          dispatch(setAuth(data));
-          return navigate("/");
-        })
-        .catch((e) => {
-          console.log(e);
+    onSubmit: async (values) => {
+      try {
+        const response = await getAuth(values);
+        if (response.error) {
+          throw new Error("invalidLogin");
+        }
+        dispatch(setAuth(response.data));
+        await refetchChannels();
+        await refetchMessages();
+        setError(false);
+        navigate("/");
+      } catch (e) {
+        console.log(e);
+        if (e.message === "invalidLogin") {
           setError(true);
-        });
+        }
+      }
     },
   });
 

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 import { actions } from "../../slices/index";
 import Channels from "./Channels";
 import Messages from "./Messages";
@@ -8,45 +9,29 @@ import { useGetMessagesQuery } from "../../services/messagesApi";
 
 const ChatBox = () => {
   const { removeAuth } = actions;
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleRemoveAuth = (path) => {
-    dispatch(removeAuth());
-    navigate(path);
-  };
-
-  const { isLoading: isChannelsLoad, isError: errorChannels } =
+  const { isLoading: isChannelsLoad, error: errorChannels } =
     useGetChannelsQuery();
-  const { isLoading: isMessagesLoad, isError: errorMessages } =
+  const { isLoading: isMessagesLoad, error: errorMessages } =
     useGetMessagesQuery();
 
-  if (isChannelsLoad || isMessagesLoad) {
-    return null;
-  } else if (errorChannels || errorMessages) {
-    return (
-      <div className="text-center">
-        <h1 className="h4 text-muted">Видимо ваш аккаунт удален, простите</h1>
-        <div className="d-flex justify-content-center">
-          <button onClick={() => handleRemoveAuth("/login")} className="btn btn-danger">
-            Попробовать зайти снова
-          </button>
-          <button onClick={() => handleRemoveAuth("/signup")} className="btn btn-primary">
-            Зарегистрироваться
-          </button>
-        </div>
+  useEffect(() => {
+    if (errorChannels?.status === 401 && errorMessages?.status === 401) {
+      dispatch(removeAuth());
+      navigate("/login");
+    }
+  });
+
+  return isChannelsLoad || isMessagesLoad ? null : (
+    <div className="container h-100 my-4 overflow-hidden rounded shadow">
+      <div className="row h-100 bg-white flex-md-row">
+        {!errorChannels && <Channels />}
+        {!errorMessages && <Messages />}
       </div>
-    );
-  } else {
-    return (
-      <div className="container h-100 my-4 overflow-hidden rounded shadow">
-        <div className="row h-100 bg-white flex-md-row">
-          <Channels />
-          <Messages />
-        </div>
-      </div>
-    );
-  }
+    </div>
+  );
 };
 
 export default ChatBox;
