@@ -6,10 +6,11 @@ const ru = {
     registration: "Регистрация",
     password: "Пароль",
     send: "Отправить",
+    loading: "Загрузка...",
     toast: {
       addedChannel: "Канал создан",
       renamedChannel: "Канал переименован",
-      removedChannel: "Канал удален",
+      removedChannel: "Канал удалён",
     },
     loginPage: {
       notAcc: "Нет аккаунта?",
@@ -18,6 +19,7 @@ const ru = {
     registrationPage: {
       username: "Имя пользователя",
       confirmPassword: "Подтвердите пароль",
+      doRegistration: "Зарегистрироваться"
     },
     chatPage: {
       channels: "Каналы",
@@ -45,7 +47,7 @@ const ru = {
       notUniqNamesChannels: "Должно быть уникальным",
       notUniqUsername: "Такой пользователь уже существует",
       invalidLogin: "Неверные имя пользователя или пароль",
-      networkError: "Проблемы с интернетом",
+      networkError: "Ошибка соединения",
     },
   },
 };
