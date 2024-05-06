@@ -7,7 +7,7 @@ import filter from "leo-profanity";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
-import { selectors } from "../../selectors";
+import selectors from "../../selectors";
 import { actions } from "../../slices/index";
 import {
   useAddChannelMutation,

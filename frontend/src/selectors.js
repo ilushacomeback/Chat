@@ -8,4 +8,4 @@ const selectors = {
   defaultChannelId: (state) => state.ui.defaultChannelId,
 };
 
-export { selectors };
+export default selectors;

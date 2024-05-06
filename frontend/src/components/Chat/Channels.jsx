@@ -1,12 +1,12 @@
-import cn from "classnames";
-import { Nav, ButtonGroup, Dropdown } from "react-bootstrap";
-import { PlusSquare } from "react-bootstrap-icons";
-import { useSelector, useDispatch } from "react-redux";
-import { useTranslation } from "react-i18next";
-import { useGetChannelsQuery } from "../../services/channelsApi";
-import { actions } from "../../slices/index";
-import { selectors } from "../../selectors";
-import Modals from "./Modals";
+import cn from 'classnames';
+import { Nav, ButtonGroup, Dropdown } from 'react-bootstrap';
+import { PlusSquare } from 'react-bootstrap-icons';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { useGetChannelsQuery } from '../../services/channelsApi';
+import { actions } from '../../slices/index';
+import selectors from '../../selectors';
+import Modals from './Modals';
 
 const Channels = () => {
   const dispatch = useDispatch();
@@ -33,8 +33,8 @@ const Channels = () => {
     return (
       <li className="nav-item w-100" key={channel.id}>
         <button
-          className={cn("w-100", "rounded-0", "text-start", "btn", {
-            "btn-secondary": channel.id === activeChannelId,
+          className={cn('w-100', 'rounded-0', 'text-start', 'btn', {
+            'btn-secondary': channel.id === activeChannelId,
           })}
           onClick={handleActiveChannel(channel.id)}
         >
@@ -51,13 +51,13 @@ const Channels = () => {
         <Dropdown as={ButtonGroup} className="d-flex">
           <button
             className={cn(
-              "w-100",
-              "rounded-0",
-              "text-start",
-              "text-truncate",
-              "btn",
+              'w-100',
+              'rounded-0',
+              'text-start',
+              'text-truncate',
+              'btn',
               {
-                "btn-secondary": channel.id === activeChannelId,
+                'btn-secondary': channel.id === activeChannelId,
               }
             )}
             onClick={handleActiveChannel(channel.id)}
@@ -66,30 +66,30 @@ const Channels = () => {
             {channel.name}
           </button>
           <Dropdown.Toggle
-            as={"button"}
+            as={'button'}
             split
-            className={cn("flex-grow-0", "btn", {
-              "btn-secondary": channel.id === activeChannelId,
+            className={cn('flex-grow-0', 'btn', {
+              'btn-secondary': channel.id === activeChannelId,
             })}
           >
             <span className="visually-hidden">
-              {t("chatPage.controlChannel")}
+              {t('chatPage.controlChannel')}
             </span>
           </Dropdown.Toggle>
           <Dropdown.Menu>
             <Dropdown.Item
               role="button"
               href="#"
-              onClick={() => handleOpen(channel.id, "modalRemoveChannel")}
+              onClick={() => handleOpen(channel.id, 'modalRemoveChannel')}
             >
-              {t("modals.delete")}
+              {t('modals.delete')}
             </Dropdown.Item>
             <Dropdown.Item
               role="button"
               href="#"
-              onClick={() => handleOpen(channel.id, "modalRenameChannel")}
+              onClick={() => handleOpen(channel.id, 'modalRenameChannel')}
             >
-              {t("modals.rename")}
+              {t('modals.rename')}
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
@@ -107,7 +107,7 @@ const Channels = () => {
             className="p-0 text-primary btn btn-group-vertical"
             onClick={() => {
               dispatch(
-                toggleModalChannel({ type: "modalChannel", isOpen: true })
+                toggleModalChannel({ type: 'modalChannel', isOpen: true })
               );
             }}
           >

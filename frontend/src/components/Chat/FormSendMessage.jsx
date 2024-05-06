@@ -1,32 +1,32 @@
-import { useFormik } from "formik";
-import { Form, Button, InputGroup } from "react-bootstrap";
-import { ArrowRightSquare } from "react-bootstrap-icons";
-import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
-import filter from "leo-profanity";
-import { selectors } from "../../selectors";
-import { useAddMessageMutation } from "../../services/messagesApi";
+import { useFormik } from 'formik'
+import { Form, Button, InputGroup } from 'react-bootstrap'
+import { ArrowRightSquare } from 'react-bootstrap-icons'
+import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
+import filter from 'leo-profanity'
+import selectors from '../../selectors'
+import { useAddMessageMutation } from '../../services/messagesApi'
 
 const FormSendMessage = () => {
-  const { t } = useTranslation();
-  const [addMessage] = useAddMessageMutation();
-  const channelId = useSelector(selectors.currentChannelId);
-  const username = useSelector(selectors.username);
+  const { t } = useTranslation()
+  const [addMessage] = useAddMessageMutation()
+  const channelId = useSelector(selectors.currentChannelId)
+  const username = useSelector(selectors.username)
   const formik = useFormik({
     initialValues: {
-      body: "",
+      body: '',
     },
     onSubmit: ({ body }, { resetForm }) => {
-      const filterBody = filter.clean(body);
+      const filterBody = filter.clean(body)
       if (filterBody !== body) {
-        toast.error("Не ругайся!", { containerId: "Parent" });
+        toast.error('Не ругайся!', { containerId: 'Parent' })
       }
-      const data = { body: filterBody, channelId, username };
-      addMessage(data);
-      resetForm();
+      const data = { body: filterBody, channelId, username }
+      addMessage(data)
+      resetForm()
     },
-  });
+  })
 
   return (
     <Form
@@ -38,7 +38,7 @@ const FormSendMessage = () => {
         <Form.Control
           name="body"
           aria-label="Новое сообщение"
-          placeholder={t("chatPage.enterMessage")}
+          placeholder={t('chatPage.enterMessage')}
           className="border-0 p-0 ps-2 form-control"
           onChange={formik.handleChange}
           value={formik.values.body}
@@ -49,11 +49,11 @@ const FormSendMessage = () => {
           disabled={formik.values.body.length < 1}
         >
           <ArrowRightSquare size={20} />
-          <span className="visually-hidden">{t("send")}</span>
+          <span className="visually-hidden">{t('send')}</span>
         </Button>
       </InputGroup>
     </Form>
-  );
-};
+  )
+}
 
-export default FormSendMessage;
+export default FormSendMessage

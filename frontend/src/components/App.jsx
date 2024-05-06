@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
-import { selectors } from "../selectors";
+import selectors from "../selectors";
 import Login from "./Auth/Login";
 import Signup from "./Auth/Signup";
 import ErrorPage from "./ErrorPage";

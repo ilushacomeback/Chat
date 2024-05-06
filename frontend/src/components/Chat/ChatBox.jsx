@@ -1,14 +1,14 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { Spinner } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
-import { actions } from "../../slices/index";
-import Channels from "./Channels";
-import Messages from "./Messages";
-import { useGetChannelsQuery } from "../../services/channelsApi";
-import { useGetMessagesQuery } from "../../services/messagesApi";
-import routes from "../../routes";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Spinner } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { actions } from '../../slices/index';
+import Channels from './Channels';
+import Messages from './Messages';
+import { useGetChannelsQuery } from '../../services/channelsApi';
+import { useGetMessagesQuery } from '../../services/messagesApi';
+import routes from '../../routes';
 
 const ChatBox = () => {
   const { removeAuth } = actions;
@@ -31,7 +31,7 @@ const ChatBox = () => {
   return isChannelsLoad || isMessagesLoad ? (
     <div className="h-100 d-flex justify-content-center align-items-center">
       <Spinner animation="border" role="status" variant="primary">
-        <span className="visually-hidden">{t("loading")}</span>
+        <span className="visually-hidden">{t('loading')}</span>
       </Spinner>
     </div>
   ) : (
