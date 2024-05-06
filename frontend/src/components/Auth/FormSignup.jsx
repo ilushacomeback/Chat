@@ -8,6 +8,7 @@ import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { actions } from "../../slices/index";
 import { useSignupMutation } from "../../services/authApi";
+import routes from "../../routes";
 
 const getValidateSchema = (t) => {
   return yup.object().shape({
@@ -51,7 +52,7 @@ const FormSignup = () => {
           throw new Error("notUniqUsername");
         }
         dispatch(setAuth(response.data));
-        navigate("/");
+        navigate(routes.homePage());
       } catch (e) {
         console.log(e)
         if (e.message === "notUniqUsername") {

@@ -54,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "eslint-plugin-functional": "^6.5.1",
     "sass": "^1.75.0"
   }
 }

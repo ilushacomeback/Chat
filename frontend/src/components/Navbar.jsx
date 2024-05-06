@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { selectors } from "../selectors";
 import { actions as authActions } from "../slices/authSlice";
+import routes from "../routes";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ const Navbar = () => {
   return (
     <BootNavbar bg="white" expand="lg" className="shadow-sm">
       <div className="container">
-        <BootNavbar.Brand as={Link} to="/">
+        <BootNavbar.Brand as={Link} to={routes.homePage()}>
           {t("homePage")}
         </BootNavbar.Brand>
         {!!token && <Button onClick={logout}>{t("exit")}</Button>}

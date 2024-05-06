@@ -1,6 +1,5 @@
 import React from "react";
 import { Provider as RollProvider, ErrorBoundary } from "@rollbar/react";
-import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { io } from "socket.io-client";
@@ -33,7 +32,7 @@ const init = async () => {
   });
 
   filter.loadDictionary("ru");
-  filter.add(["пидор", "уебан", "гей", "русня", "сосать", "гандон"]);
+  // filter.add([""]);
 
   const socket = io();
 
@@ -88,15 +87,13 @@ const init = async () => {
   return (
     <React.StrictMode>
       <Provider store={store}>
-        <I18nextProvider i18n={i18Instance}>
-          <BrowserRouter>
-            <RollProvider config={rollbarConfig}>
-              <ErrorBoundary>
-                <App />
-              </ErrorBoundary>
-            </RollProvider>
-          </BrowserRouter>
-        </I18nextProvider>
+        <RollProvider config={rollbarConfig}>
+          <ErrorBoundary>
+            <I18nextProvider i18n={i18Instance}>
+              <App />
+            </I18nextProvider>
+          </ErrorBoundary>
+        </RollProvider>
       </Provider>
     </React.StrictMode>
   );

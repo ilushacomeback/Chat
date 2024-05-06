@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet, BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectors } from "../selectors";
@@ -7,15 +7,16 @@ import Signup from "./Auth/Signup";
 import ErrorPage from "./ErrorPage";
 import Navbar from "./Navbar";
 import ChatBox from "./Chat/ChatBox";
+import routes from "../routes";
 
 const App = () => {
   const PrivateChat = () => {
     const token = useSelector(selectors.token);
-    return token ? <Outlet /> : <Navigate to="/login" />;
+    return token ? <Outlet /> : <Navigate to={routes.loginPage()} />;
   };
 
   return (
-    <>
+    <BrowserRouter>
       <div className="d-flex flex-column h-100">
         <Navbar />
         <Routes>
@@ -28,7 +29,7 @@ const App = () => {
         </Routes>
       </div>
       <ToastContainer containerId="Parent" />
-    </>
+    </BrowserRouter>
   );
 };
 

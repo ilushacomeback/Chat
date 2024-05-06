@@ -9,6 +9,7 @@ import { actions } from "../../slices/index";
 import { useGetAuthMutation } from "../../services/authApi";
 import { useGetChannelsQuery } from "../../services/channelsApi";
 import { useGetMessagesQuery } from "../../services/messagesApi";
+import routes from "../../routes";
 
 const FormLogin = () => {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ const FormLogin = () => {
         await refetchChannels();
         await refetchMessages();
         setError(false);
-        navigate("/");
+        navigate(routes.homePage());
       } catch (e) {
         console.log(e);
         if (e.message === "invalidLogin") {

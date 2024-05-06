@@ -6,6 +6,7 @@ import Channels from "./Channels";
 import Messages from "./Messages";
 import { useGetChannelsQuery } from "../../services/channelsApi";
 import { useGetMessagesQuery } from "../../services/messagesApi";
+import routes from "../../routes";
 
 const ChatBox = () => {
   const { removeAuth } = actions;
@@ -20,7 +21,7 @@ const ChatBox = () => {
   useEffect(() => {
     if (errorChannels?.status === 401 && errorMessages?.status === 401) {
       dispatch(removeAuth());
-      navigate("/login");
+      navigate(routes.loginPage());
     }
   });
 
