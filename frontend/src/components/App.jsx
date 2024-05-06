@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectors } from "../selectors";
 import Login from "./Auth/Login";
@@ -14,17 +15,20 @@ const App = () => {
   };
 
   return (
-    <div className="d-flex flex-column h-100">
-      <Navbar />
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route exact path="/" element={<PrivateChat />}>
-          <Route path="" element={<ChatBox />} />
-        </Route>
-        <Route path="/signup" element={<Signup />} />
-        <Route path="*" element={<ErrorPage />} />
-      </Routes>
-    </div>
+    <>
+      <div className="d-flex flex-column h-100">
+        <Navbar />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route exact path="/" element={<PrivateChat />}>
+            <Route path="" element={<ChatBox />} />
+          </Route>
+          <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
+      </div>
+      <ToastContainer containerId="Parent" />
+    </>
   );
 };
 

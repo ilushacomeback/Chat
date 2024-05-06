@@ -2,6 +2,7 @@ import React from "react";
 import i18n from "i18next";
 import { io } from "socket.io-client";
 import { initReactI18next, I18nextProvider } from "react-i18next";
+import { ToastContainer } from "react-bootstrap";
 import resources from "./locales/index.js";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
@@ -81,6 +82,7 @@ const init = async () => {
         <I18nextProvider i18n={i18Instance}>
           <BrowserRouter>
             <App />
+            
           </BrowserRouter>
         </I18nextProvider>
       </Provider>

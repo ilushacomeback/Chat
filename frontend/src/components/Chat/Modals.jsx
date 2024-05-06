@@ -4,6 +4,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import { useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import { selectors } from "../../selectors";
 import { actions } from "../../slices/index";
@@ -43,6 +44,7 @@ const ModalChannel = ({ toggleModalChannel }) => {
     onSubmit: async ({ name }, { resetForm }) => {
       const response = await addChannel({ name });
       dispatch(setActive(response.data.id));
+      toast.success(t("toast.addedChannel"), { containerId: "Parent" });
       dispatch(toggleModalChannel({ isOpen: false, type: "modalChannel" }));
       resetForm();
     },
@@ -119,6 +121,7 @@ const ModalRemoveChannel = ({ toggleModalChannel }) => {
 
   const handleRemove = () => {
     removeChannel(idTouchChannel);
+    toast.success(t("toast.removedChannel"), { containerId: "Parent" });
     closeModal();
   };
 
@@ -179,6 +182,7 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
     validateOnChange: false,
     onSubmit: async ({ name, id }, { resetForm }) => {
       await renameChannel({ name, id });
+      toast.success(t("toast.renamedChannel"), { containerId: "Parent" });
       сloseModal();
       resetForm();
     },

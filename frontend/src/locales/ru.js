@@ -6,6 +6,11 @@ const ru = {
     registration: "Регистрация",
     password: "Пароль",
     send: "Отправить",
+    toast: {
+      addedChannel: "Канал создан",
+      renamedChannel: "Канал переименован",
+      removedChannel: "Канал удален"
+    },
     loginPage: {
       notAcc: "Нет аккаунта?",
       username: "Ваш ник",
