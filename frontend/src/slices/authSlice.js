@@ -1,7 +1,4 @@
-import { createSlice, current } from "@reduxjs/toolkit";
-import { channelsApi } from "../services/channelsApi";
-import { messagesApi } from "../services/messagesApi";
-import { authApi } from "../services/authApi";
+import { createSlice } from "@reduxjs/toolkit";
 
 const authSlice = createSlice({
   name: "auth",
