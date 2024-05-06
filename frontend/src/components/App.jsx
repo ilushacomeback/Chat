@@ -4,16 +4,16 @@ import {
   Navigate,
   Outlet,
   BrowserRouter,
-} from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import { useSelector } from "react-redux";
-import selectors from "../selectors";
-import Login from "./Auth/Login";
-import Signup from "./Auth/Signup";
-import ErrorPage from "./ErrorPage";
-import Navbar from "./Navbar";
-import ChatBox from "./Chat/ChatBox";
-import routes from "../routes";
+} from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import selectors from '../selectors';
+import Login from './Auth/Login';
+import Signup from './Auth/Signup';
+import ErrorPage from './ErrorPage';
+import Navbar from './Navbar';
+import ChatBox from './Chat/ChatBox';
+import routes from '../routes';
 
 const App = () => {
   const PrivateChat = () => {

@@ -1,9 +1,9 @@
-import { useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
-import FormSendMessage from "./FormSendMessage";
-import { useGetMessagesQuery } from "../../services/messagesApi";
-import { useGetChannelsQuery } from "../../services/channelsApi";
-import selectors from "../../selectors";
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import FormSendMessage from './FormSendMessage';
+import { useGetMessagesQuery } from '../../services/messagesApi';
+import { useGetChannelsQuery } from '../../services/channelsApi';
+import selectors from '../../selectors';
 
 const Messages = () => {
   const { t } = useTranslation();
@@ -35,7 +35,7 @@ const Messages = () => {
             <b># {channel && channel.name}</b>
           </p>
           <span className="text-muted">
-            {t("chatPage.messages", { count: messages.length })}
+            {t('chatPage.messages', { count: messages.length })}
           </span>
         </div>
         <div className="chat-messages overflow-auto px-5 ">

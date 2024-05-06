@@ -1,30 +1,30 @@
-import * as yup from "yup";
-import cn from "classnames";
-import { Modal, Button, Form } from "react-bootstrap";
-import { useRef, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import filter from "leo-profanity";
-import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
-import { useFormik } from "formik";
-import selectors from "../../selectors";
-import { actions } from "../../slices/index";
+import * as yup from 'yup';
+import cn from 'classnames';
+import { Modal, Button, Form } from 'react-bootstrap';
+import { useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import filter from 'leo-profanity';
+import { useSelector, useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { useFormik } from 'formik';
+import selectors from '../../selectors';
+import { actions } from '../../slices/index';
 import {
   useAddChannelMutation,
   useGetChannelsQuery,
   useRemoveChannelMutation,
   useRenameChannelMutation,
-} from "../../services/channelsApi";
+} from '../../services/channelsApi';
 
 const getValidateSchema = (channels, t) =>
   yup.object().shape({
     name: yup
       .string()
-      .required(t("errors.required"))
+      .required(t('errors.required'))
       .trim()
-      .min(3, t("errors.minMax"))
-      .max(20, t("errors.minMax"))
-      .notOneOf(channels, t("errors.notUniqNamesChannels")),
+      .min(3, t('errors.minMax'))
+      .max(20, t('errors.minMax'))
+      .notOneOf(channels, t('errors.notUniqNamesChannels')),
   });
 
 const ModalChannel = ({ toggleModalChannel }) => {
@@ -38,7 +38,7 @@ const ModalChannel = ({ toggleModalChannel }) => {
 
   const formik = useFormik({
     initialValues: {
-      name: "",
+      name: '',
     },
     validationSchema: getValidateSchema(names, t),
     validateOnChange: false,
@@ -46,8 +46,8 @@ const ModalChannel = ({ toggleModalChannel }) => {
       const filterName = filter.clean(name);
       const response = await addChannel({ name: filterName });
       dispatch(setActive(response.data.id));
-      toast.success(t("toast.addedChannel"), { containerId: "Parent" });
-      dispatch(toggleModalChannel({ isOpen: false, type: "modalChannel" }));
+      toast.success(t('toast.addedChannel'), { containerId: 'Parent' });
+      dispatch(toggleModalChannel({ isOpen: false, type: 'modalChannel' }));
       resetForm();
     },
   });
@@ -59,14 +59,14 @@ const ModalChannel = ({ toggleModalChannel }) => {
   return (
     <>
       <Modal.Header>
-        <Modal.Title>{t("modals.addChannel")}</Modal.Title>
+        <Modal.Title>{t('modals.addChannel')}</Modal.Title>
         <Button
           as="button"
           aria-label="Close"
           className="btn btn-close"
           onClick={() =>
             dispatch(
-              toggleModalChannel({ isOpen: false, type: "modalChannel" })
+              toggleModalChannel({ isOpen: false, type: 'modalChannel' })
             )
           }
         />
@@ -76,15 +76,15 @@ const ModalChannel = ({ toggleModalChannel }) => {
           <Form.Control
             as="input"
             id="name"
-            className={cn("mb-2", {
-              "is-invalid": formik.errors.name && formik.touched.name,
+            className={cn('mb-2', {
+              'is-invalid': formik.errors.name && formik.touched.name,
             })}
             value={formik.values.name}
             ref={input}
             onChange={formik.handleChange}
           />
           <Form.Label className="visually-hidden" htmlFor="name">
-            {t("modals.nameChannel")}
+            {t('modals.nameChannel')}
           </Form.Label>
           <div className="invalid-feedback">
             {formik.touched.name && formik.errors.name}
@@ -95,14 +95,14 @@ const ModalChannel = ({ toggleModalChannel }) => {
               className="me-2 btn btn-secondary"
               onClick={() =>
                 dispatch(
-                  toggleModalChannel({ isOpen: false, type: "modalChannel" })
+                  toggleModalChannel({ isOpen: false, type: 'modalChannel' })
                 )
               }
             >
-              {t("modals.cancel")}
+              {t('modals.cancel')}
             </Button>
             <Button type="submit" className="btn btn-primary">
-              {t("send")}
+              {t('send')}
             </Button>
           </div>
         </Form>
@@ -118,19 +118,19 @@ const ModalRemoveChannel = ({ toggleModalChannel }) => {
   const idTouchChannel = useSelector(selectors.idTouchChannel);
 
   const closeModal = () => {
-    dispatch(toggleModalChannel({ isOpen: false, type: "modalRemoveChannel" }));
+    dispatch(toggleModalChannel({ isOpen: false, type: 'modalRemoveChannel' }));
   };
 
   const handleRemove = async () => {
     await removeChannel(idTouchChannel);
-    toast.success(t("toast.removedChannel"), { containerId: "Parent" });
+    toast.success(t('toast.removedChannel'), { containerId: 'Parent' });
     closeModal();
   };
 
   return (
     <>
       <Modal.Header>
-        <Modal.Title>{t("modals.removeChannel")}</Modal.Title>
+        <Modal.Title>{t('modals.removeChannel')}</Modal.Title>
         <Button
           as="button"
           aria-label="Close"
@@ -139,21 +139,21 @@ const ModalRemoveChannel = ({ toggleModalChannel }) => {
         />
       </Modal.Header>
       <Modal.Body>
-        <p className="lead">{t("modals.sure")}</p>
+        <p className="lead">{t('modals.sure')}</p>
         <div className="d-flex justify-content-end">
           <Button
             as="button"
             className="me-2 btn btn-secondary"
             onClick={closeModal}
           >
-            {t("modals.cancel")}
+            {t('modals.cancel')}
           </Button>
           <Button
             type="submit"
             className="btn btn-danger"
             onClick={handleRemove}
           >
-            {t("modals.delete")}
+            {t('modals.delete')}
           </Button>
         </div>
       </Modal.Body>
@@ -172,7 +172,7 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
   const currentChannel = channels.find(({ id }) => id === idTouchChannel);
 
   const сloseModal = () => {
-    dispatch(toggleModalChannel({ isOpen: false, type: "modalRenameChannel" }));
+    dispatch(toggleModalChannel({ isOpen: false, type: 'modalRenameChannel' }));
   };
 
   const formik = useFormik({
@@ -185,7 +185,7 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
     onSubmit: async ({ name, id }, { resetForm }) => {
       const filterName = filter.clean(name);
       await renameChannel({ name: filterName, id });
-      toast.success(t("toast.renamedChannel"), { containerId: "Parent" });
+      toast.success(t('toast.renamedChannel'), { containerId: 'Parent' });
       сloseModal();
       resetForm();
     },
@@ -198,7 +198,7 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
   return (
     <>
       <Modal.Header>
-        <Modal.Title>{t("modals.renameChannel")}</Modal.Title>
+        <Modal.Title>{t('modals.renameChannel')}</Modal.Title>
         <Button
           as="button"
           aria-label="Close"
@@ -211,15 +211,15 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
           <Form.Control
             as="input"
             id="name"
-            className={cn("mb-2", {
-              "is-invalid": formik.errors.name && formik.touched.name,
+            className={cn('mb-2', {
+              'is-invalid': formik.errors.name && formik.touched.name,
             })}
             value={formik.values.name}
             ref={input}
             onChange={formik.handleChange}
           />
           <Form.Label className="visually-hidden" htmlFor="name">
-            {t("modals.nameChannel")}
+            {t('modals.nameChannel')}
           </Form.Label>
           <div className="invalid-feedback">
             {formik.errors.name && formik.touched.name
@@ -232,10 +232,10 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
               className="me-2 btn btn-secondary"
               onClick={сloseModal}
             >
-              {t("modals.cancel")}
+              {t('modals.cancel')}
             </Button>
             <Button type="submit" className="btn btn-primary">
-              {t("send")}
+              {t('send')}
             </Button>
           </div>
         </Form>
