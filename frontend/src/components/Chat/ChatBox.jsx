@@ -16,10 +16,8 @@ const ChatBox = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const { isLoading: isChannelsLoad, error: errorChannels } =
-    useGetChannelsQuery();
-  const { isLoading: isMessagesLoad, error: errorMessages } =
-    useGetMessagesQuery();
+  const { isLoading: isChannelsLoad, error: errorChannels } = useGetChannelsQuery();
+  const { isLoading: isMessagesLoad, error: errorMessages } = useGetMessagesQuery();
 
   useEffect(() => {
     if (errorChannels?.status === 401 && errorMessages?.status === 401) {

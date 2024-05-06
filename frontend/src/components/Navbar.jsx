@@ -1,8 +1,7 @@
 import { Navbar as BootNavbar, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import selectors from '../selectors';
 import { actions as authActions } from '../slices/authSlice';
 import routes from '../routes';

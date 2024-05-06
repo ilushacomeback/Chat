@@ -16,12 +16,11 @@ import App from './components/App.jsx';
 const init = async () => {
   const store = configureStore({
     reducer,
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat([
-        channelsApi.middleware,
-        messagesApi.middleware,
-        authApi.middleware,
-      ]),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([
+      channelsApi.middleware,
+      messagesApi.middleware,
+      authApi.middleware,
+    ]),
   });
 
   const i18Instance = i18n.createInstance();
@@ -40,7 +39,7 @@ const init = async () => {
     store.dispatch(
       messagesApi.util.updateQueryData('getMessages', undefined, (messages) => {
         messages.push(payload);
-      })
+      }),
     );
   });
 
@@ -48,7 +47,7 @@ const init = async () => {
     store.dispatch(
       channelsApi.util.updateQueryData('getChannels', undefined, (channels) => {
         channels.push(payload);
-      })
+      }),
     );
   });
 
@@ -56,7 +55,7 @@ const init = async () => {
     store.dispatch(
       channelsApi.util.updateQueryData('getChannels', undefined, (channels) => {
         const filteredChannels = channels.filter(
-          (channel) => channel.id !== id
+          (channel) => channel.id !== id,
         );
         const currentChannelId = store.getState().ui.activeChannelId;
         const defaultChannel = store.getState().ui.defaultChannelId;
@@ -64,18 +63,18 @@ const init = async () => {
           store.dispatch(actions.setActive(defaultChannel));
         }
         return filteredChannels;
-      })
+      }),
     );
   });
 
   socket.on('renameChannel', (payload) => {
     store.dispatch(
       channelsApi.util.updateQueryData('getChannels', undefined, (channels) => {
-        const index = channels.findIndex(
-          (channel) => channel.id === payload.id
+        const currentChannel = channels.find(
+          (channel) => channel.id === payload.id,
         );
-        channels[index] = payload;
-      })
+        currentChannel.name = payload.name;
+      }),
     );
   });
 

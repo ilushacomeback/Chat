@@ -16,16 +16,15 @@ import {
   useRenameChannelMutation,
 } from '../../services/channelsApi';
 
-const getValidateSchema = (channels, t) =>
-  yup.object().shape({
-    name: yup
-      .string()
-      .required(t('errors.required'))
-      .trim()
-      .min(3, t('errors.minMax'))
-      .max(20, t('errors.minMax'))
-      .notOneOf(channels, t('errors.notUniqNamesChannels')),
-  });
+const getValidateSchema = (channels, t) => yup.object().shape({
+  name: yup
+    .string()
+    .required(t('errors.required'))
+    .trim()
+    .min(3, t('errors.minMax'))
+    .max(20, t('errors.minMax'))
+    .notOneOf(channels, t('errors.notUniqNamesChannels')),
+});
 
 const ModalChannel = ({ toggleModalChannel }) => {
   const { t } = useTranslation();
@@ -64,11 +63,9 @@ const ModalChannel = ({ toggleModalChannel }) => {
           as="button"
           aria-label="Close"
           className="btn btn-close"
-          onClick={() =>
-            dispatch(
-              toggleModalChannel({ isOpen: false, type: 'modalChannel' })
-            )
-          }
+          onClick={() => dispatch(
+            toggleModalChannel({ isOpen: false, type: 'modalChannel' }),
+          )}
         />
       </Modal.Header>
       <Modal.Body>
@@ -93,11 +90,9 @@ const ModalChannel = ({ toggleModalChannel }) => {
             <Button
               as="button"
               className="me-2 btn btn-secondary"
-              onClick={() =>
-                dispatch(
-                  toggleModalChannel({ isOpen: false, type: 'modalChannel' })
-                )
-              }
+              onClick={() => dispatch(
+                toggleModalChannel({ isOpen: false, type: 'modalChannel' }),
+              )}
             >
               {t('modals.cancel')}
             </Button>

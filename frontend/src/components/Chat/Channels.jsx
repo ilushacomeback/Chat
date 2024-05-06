@@ -25,77 +25,75 @@ const Channels = () => {
         isOpen: true,
         type,
         id,
-      })
+      }),
     );
   };
 
-  const renderDefaultChannel = (channel) => {
-    return (
-      <li className="nav-item w-100" key={channel.id}>
+  const renderDefaultChannel = (channel) => (
+    <li className="nav-item w-100" key={channel.id}>
+      <button
+        type="button"
+        className={cn('w-100', 'rounded-0', 'text-start', 'btn', {
+          'btn-secondary': channel.id === activeChannelId,
+        })}
+        onClick={handleActiveChannel(channel.id)}
+      >
+        <span className="me-1">#</span>
+        {channel.name}
+      </button>
+    </li>
+  );
+
+  const renderCustomChannel = (channel) => (
+    <li className="nav-item w-100" key={channel.id}>
+      <Dropdown as={ButtonGroup} className="d-flex">
         <button
-          className={cn('w-100', 'rounded-0', 'text-start', 'btn', {
-            'btn-secondary': channel.id === activeChannelId,
-          })}
+          type="button"
+          className={cn(
+            'w-100',
+            'rounded-0',
+            'text-start',
+            'text-truncate',
+            'btn',
+            {
+              'btn-secondary': channel.id === activeChannelId,
+            },
+          )}
           onClick={handleActiveChannel(channel.id)}
         >
           <span className="me-1">#</span>
           {channel.name}
         </button>
-      </li>
-    );
-  };
-
-  const renderCustomChannel = (channel) => {
-    return (
-      <li className="nav-item w-100" key={channel.id}>
-        <Dropdown as={ButtonGroup} className="d-flex">
-          <button
-            className={cn(
-              'w-100',
-              'rounded-0',
-              'text-start',
-              'text-truncate',
-              'btn',
-              {
-                'btn-secondary': channel.id === activeChannelId,
-              }
-            )}
-            onClick={handleActiveChannel(channel.id)}
+        <Dropdown.Toggle
+          as="button"
+          split
+          className={cn('flex-grow-0', 'btn', {
+            'btn-secondary': channel.id === activeChannelId,
+          })}
+        >
+          <span className="visually-hidden">
+            {t('chatPage.controlChannel')}
+          </span>
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          <Dropdown.Item
+            role="button"
+            href="#"
+            onClick={() => handleOpen(channel.id, 'modalRemoveChannel')}
           >
-            <span className="me-1">#</span>
-            {channel.name}
-          </button>
-          <Dropdown.Toggle
-            as={'button'}
-            split
-            className={cn('flex-grow-0', 'btn', {
-              'btn-secondary': channel.id === activeChannelId,
-            })}
+            {t('modals.delete')}
+          </Dropdown.Item>
+          <Dropdown.Item
+            role="button"
+            href="#"
+            onClick={() => handleOpen(channel.id, 'modalRenameChannel')}
           >
-            <span className="visually-hidden">
-              {t('chatPage.controlChannel')}
-            </span>
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item
-              role="button"
-              href="#"
-              onClick={() => handleOpen(channel.id, 'modalRemoveChannel')}
-            >
-              {t('modals.delete')}
-            </Dropdown.Item>
-            <Dropdown.Item
-              role="button"
-              href="#"
-              onClick={() => handleOpen(channel.id, 'modalRenameChannel')}
-            >
-              {t('modals.rename')}
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </li>
-    );
-  };
+            {t('modals.rename')}
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    </li>
+  );
 
   return isLoading ? null : (
     <>
@@ -103,11 +101,11 @@ const Channels = () => {
         <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
           <b>Каналы</b>
           <button
-            as="button"
+            type="button"
             className="p-0 text-primary btn btn-group-vertical"
             onClick={() => {
               dispatch(
-                toggleModalChannel({ type: 'modalChannel', isOpen: true })
+                toggleModalChannel({ type: 'modalChannel', isOpen: true }),
               );
             }}
           >
@@ -120,11 +118,9 @@ const Channels = () => {
           id="channels-box"
           className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block"
         >
-          {channels.map((channel) =>
-            channel.removable
-              ? renderCustomChannel(channel)
-              : renderDefaultChannel(channel)
-          )}
+          {channels.map((channel) => (channel.removable
+            ? renderCustomChannel(channel)
+            : renderDefaultChannel(channel)))}
         </Nav>
       </div>
       <Modals />

@@ -11,24 +11,22 @@ import { actions } from '../../slices/index';
 import { useSignupMutation } from '../../services/authApi';
 import routes from '../../routes';
 
-const getValidateSchema = (t) => {
-  return yup.object().shape({
-    username: yup
-      .string()
-      .required(t('errors.required'))
-      .trim()
-      .min(3, t('errors.minMax'))
-      .max(20, t('errors.minMax')),
-    password: yup
-      .string()
-      .required(t('errors.required'))
-      .trim()
-      .min(6, t('errors.minPassword')),
-    confirmPassword: yup
-      .string()
-      .oneOf([yup.ref('password')], t('errors.mismatchPassword')),
-  });
-};
+const getValidateSchema = (t) => yup.object().shape({
+  username: yup
+    .string()
+    .required(t('errors.required'))
+    .trim()
+    .min(3, t('errors.minMax'))
+    .max(20, t('errors.minMax')),
+  password: yup
+    .string()
+    .required(t('errors.required'))
+    .trim()
+    .min(6, t('errors.minPassword')),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], t('errors.mismatchPassword')),
+});
 
 const FormSignup = () => {
   const [signup] = useSignupMutation();
@@ -92,8 +90,8 @@ const FormSignup = () => {
                   <Form.Control
                     className={cn({
                       'is-invalid':
-                        (formik.touched.username && formik.errors.username) ||
-                        error,
+                        (formik.touched.username && formik.errors.username)
+                        || error,
                     })}
                     type="text"
                     name="username"
@@ -115,8 +113,8 @@ const FormSignup = () => {
                   <Form.Control
                     className={cn({
                       'is-invalid':
-                        (formik.touched.password && formik.errors.password) ||
-                        error,
+                        (formik.touched.password && formik.errors.password)
+                        || error,
                     })}
                     type="password"
                     name="password"
@@ -135,9 +133,9 @@ const FormSignup = () => {
                   <Form.Control
                     className={cn({
                       'is-invalid':
-                        (formik.touched.confirmPassword &&
-                          formik.errors.confirmPassword) ||
-                        error,
+                        (formik.touched.confirmPassword
+                          && formik.errors.confirmPassword)
+                        || error,
                     })}
                     type="password"
                     name="confirmPassword"
@@ -156,8 +154,8 @@ const FormSignup = () => {
                     {t('registrationPage.confirmPassword')}
                   </Form.Label>
                   <div className="invalid-tooltip">
-                    {formik.touched.confirmPassword &&
-                      formik.errors.confirmPassword}
+                    {formik.touched.confirmPassword
+                      && formik.errors.confirmPassword}
                   </div>
                 </Form.Floating>
                 <Button

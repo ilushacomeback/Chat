@@ -8,31 +8,32 @@ import selectors from '../../selectors';
 const Messages = () => {
   const { t } = useTranslation();
 
-  const { data: channels, isLoading: isLoadingChannels } =
-    useGetChannelsQuery();
-  const { data: allMessages, isLoading: isLoadingMessages } =
-    useGetMessagesQuery();
+  const { data: channels, isLoading: isLoadingChannels } = useGetChannelsQuery();
+  const { data: allMessages, isLoading: isLoadingMessages } = useGetMessagesQuery();
   const activeChannelId = useSelector(selectors.currentChannelId);
 
-  const channel = channels.find((channel) => activeChannelId === channel.id);
+  const currentChannel = channels.find((channel) => activeChannelId === channel.id);
   const messages = allMessages.filter(
-    ({ channelId }) => channelId === activeChannelId
+    ({ channelId }) => channelId === activeChannelId,
   );
 
-  const renderMessage = (message) => {
-    return (
-      <div className="text-break mb-2" key={message.id}>
-        <b>{message.username}</b>: {message.body}
-      </div>
-    );
-  };
+  const renderMessage = (message) => (
+    <div className="text-break mb-2" key={message.id}>
+      <b>{message.username}</b>
+      :
+      {message.body}
+    </div>
+  );
 
   return isLoadingChannels || isLoadingMessages ? null : (
     <div className="col p-0 h-100">
       <div className="d-flex flex-column h-100">
         <div className="bg-light mb-4 p-3 shadow-sm small">
           <p className="m-0">
-            <b># {channel && channel.name}</b>
+            <b>
+              #
+              {currentChannel && currentChannel.name}
+            </b>
           </p>
           <span className="text-muted">
             {t('chatPage.messages', { count: messages.length })}
