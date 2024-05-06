@@ -85,11 +85,6 @@ const init = async () => {
     environment: "production",
   };
 
-  function TestError() {
-    const a = null;
-    return a.hello();
-  }
-
   return (
     <React.StrictMode>
       <Provider store={store}>
@@ -98,7 +93,6 @@ const init = async () => {
             <RollProvider config={rollbarConfig}>
               <ErrorBoundary>
                 <App />
-                <TestError />
               </ErrorBoundary>
             </RollProvider>
           </BrowserRouter>
