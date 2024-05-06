@@ -5,7 +5,7 @@ const selectors = {
   isOpen: (state) => state.ui.isOpen,
   idTouchChannel: (state) => state.ui.idTouchChannel,
   currentChannelId: (state) => state.ui.activeChannelId,
-  defaultChannelId: (state) => state.ui.defaultChannelId
+  defaultChannelId: (state) => state.ui.defaultChannelId,
 };
 
 export { selectors };

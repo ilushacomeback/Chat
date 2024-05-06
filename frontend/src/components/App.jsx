@@ -1,4 +1,10 @@
-import { Routes, Route, Navigate, Outlet, BrowserRouter } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+  BrowserRouter,
+} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectors } from "../selectors";

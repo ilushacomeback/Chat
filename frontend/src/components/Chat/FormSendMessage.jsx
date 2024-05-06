@@ -20,7 +20,7 @@ const FormSendMessage = () => {
     onSubmit: ({ body }, { resetForm }) => {
       const filterBody = filter.clean(body);
       if (filterBody !== body) {
-        toast.error("Не ругайся!", { containerId: "Parent" })
+        toast.error("Не ругайся!", { containerId: "Parent" });
       }
       const data = { body: filterBody, channelId, username };
       addMessage(data);

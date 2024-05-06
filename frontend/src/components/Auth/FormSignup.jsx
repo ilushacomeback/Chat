@@ -5,6 +5,7 @@ import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState, useRef, useEffect } from "react";
+import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { actions } from "../../slices/index";
 import { useSignupMutation } from "../../services/authApi";
@@ -36,6 +37,7 @@ const FormSignup = () => {
   const { t } = useTranslation();
   const { setAuth } = actions;
   const [error, setError] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const input = useRef();
   const formik = useFormik({
     initialValues: {
@@ -46,18 +48,27 @@ const FormSignup = () => {
     validationSchema: getValidateSchema(t),
     validateOnChange: false,
     onSubmit: async (values) => {
+      setLoading(true);
       try {
         const response = await signup(values);
-        if (response?.error?.status === 409) {
-          throw new Error("notUniqUsername");
+        if (response?.error) {
+          if (response?.error?.status === 409) {
+            throw new Error("notUniqUsername");
+          } else {
+            throw new Error("disconnect");
+          }
         }
         dispatch(setAuth(response.data));
+        setLoading(false);
         navigate(routes.homePage());
       } catch (e) {
-        console.log(e)
+        console.log(e);
         if (e.message === "notUniqUsername") {
           setError(true);
+        } else {
+          toast.error(t("errors.networkError"), { containerId: "Parent" });
         }
+        setLoading(false);
       }
     },
   });
@@ -136,7 +147,12 @@ const FormSignup = () => {
           {formik.touched.confirmPassword && formik.errors.confirmPassword}
         </div>
       </Form.Floating>
-      <Button type="submit" className="w-100 mb-3" variant="outline-primary">
+      <Button
+        type="submit"
+        className="w-100 mb-3"
+        variant="outline-primary"
+        disabled={isLoading}
+      >
         {t("login")}
       </Button>
     </Form>

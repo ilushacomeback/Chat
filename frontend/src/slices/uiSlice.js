@@ -5,7 +5,7 @@ const initialState = {
   defaultChannelId: "1",
   currentModal: null,
   isOpen: false,
-  idTouchChannel: null
+  idTouchChannel: null,
 };
 
 const uiSlice = createSlice({
@@ -19,7 +19,7 @@ const uiSlice = createSlice({
       const { type, isOpen, id } = payload;
       state.currentModal = type;
       state.isOpen = isOpen;
-      state.idTouchChannel = id ? id : state.idTouchChannel 
+      state.idTouchChannel = id ? id : state.idTouchChannel;
     },
   },
 });

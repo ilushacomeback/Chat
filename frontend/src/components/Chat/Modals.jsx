@@ -3,7 +3,7 @@ import cn from "classnames";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import filter from 'leo-profanity'
+import filter from "leo-profanity";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
@@ -43,7 +43,7 @@ const ModalChannel = ({ toggleModalChannel }) => {
     validationSchema: getValidateSchema(names, t),
     validateOnChange: false,
     onSubmit: async ({ name }, { resetForm }) => {
-      const filterName = filter.clean(name)
+      const filterName = filter.clean(name);
       const response = await addChannel({ name: filterName });
       dispatch(setActive(response.data.id));
       toast.success(t("toast.addedChannel"), { containerId: "Parent" });
@@ -183,7 +183,7 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
     validationSchema: getValidateSchema(names, t),
     validateOnChange: false,
     onSubmit: async ({ name, id }, { resetForm }) => {
-      const filterName = filter.clean(name)
+      const filterName = filter.clean(name);
       await renameChannel({ name: filterName, id });
       toast.success(t("toast.renamedChannel"), { containerId: "Parent" });
       сloseModal();

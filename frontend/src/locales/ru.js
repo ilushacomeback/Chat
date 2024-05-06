@@ -9,7 +9,7 @@ const ru = {
     toast: {
       addedChannel: "Канал создан",
       renamedChannel: "Канал переименован",
-      removedChannel: "Канал удален"
+      removedChannel: "Канал удален",
     },
     loginPage: {
       notAcc: "Нет аккаунта?",
@@ -35,7 +35,7 @@ const ru = {
       nameChannel: "Имя канала",
       removeChannel: "Удалить канал",
       renameChannel: "Переименовать канал",
-      sure: "Уверены?"
+      sure: "Уверены?",
     },
     errors: {
       required: "Обязательное поле",
@@ -45,6 +45,7 @@ const ru = {
       notUniqNamesChannels: "Должно быть уникальным",
       notUniqUsername: "Такой пользователь уже существует",
       invalidLogin: "Неверные имя пользователя или пароль",
+      networkError: "Проблемы с интернетом",
     },
   },
 };

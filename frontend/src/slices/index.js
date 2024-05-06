@@ -5,7 +5,6 @@ import { channelsApi } from "../services/channelsApi";
 import { messagesApi } from "../services/messagesApi";
 import { authApi } from "../services/authApi";
 
-
 const actions = {
   ...authActions,
   ...modalsActions,
@@ -16,7 +15,7 @@ export { actions };
 export default combineReducers({
   auth,
   ui,
-  [channelsApi.reducerPath]: channelsApi.reducer ,
+  [channelsApi.reducerPath]: channelsApi.reducer,
   [messagesApi.reducerPath]: messagesApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
 });

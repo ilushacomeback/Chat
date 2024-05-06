@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import { actions } from "../../slices/index";
 import { useGetAuthMutation } from "../../services/authApi";
 import { useGetChannelsQuery } from "../../services/channelsApi";
@@ -19,6 +20,7 @@ const FormLogin = () => {
   const { refetch: refetchChannels } = useGetChannelsQuery();
   const { refetch: refetchMessages } = useGetMessagesQuery();
   const [error, setError] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const input = useRef();
   const { setAuth } = actions;
 
@@ -28,21 +30,30 @@ const FormLogin = () => {
       password: "",
     },
     onSubmit: async (values) => {
+      setLoading(true);
       try {
         const response = await getAuth(values);
-        if (response.error) {
-          throw new Error("invalidLogin");
+        if (response?.error) {
+          if (response?.error?.status === 401) {
+            throw new Error("invalidLogin");
+          } else {
+            throw new Error("disconnect");
+          }
         }
         dispatch(setAuth(response.data));
         await refetchChannels();
         await refetchMessages();
         setError(false);
+        setLoading(false);
         navigate(routes.homePage());
       } catch (e) {
         console.log(e);
         if (e.message === "invalidLogin") {
           setError(true);
+        } else {
+          toast.error(t("errors.networkError"), { containerId: "Parent" });
         }
+        setLoading(false);
       }
     },
   });
@@ -91,7 +102,12 @@ const FormLogin = () => {
           <div className="invalid-tooltip">{t("errors.invalidLogin")}</div>
         )}
       </Form.Floating>
-      <Button type="submit" className="w-100 mb-3" variant="outline-primary">
+      <Button
+        type="submit"
+        className="w-100 mb-3"
+        variant="outline-primary"
+        disabled={isLoading}
+      >
         {t("login")}
       </Button>
     </Form>

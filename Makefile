@@ -1,3 +1,5 @@
+lint-frontend:
+	make -C frontend lint
 start-frontend:
 	make -C frontend start
 start-backend:
