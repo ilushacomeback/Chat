@@ -1,12 +1,12 @@
 import React from "react";
-import i18n from "i18next";
-import { io } from "socket.io-client";
-import { initReactI18next, I18nextProvider } from "react-i18next";
-import { ToastContainer } from "react-bootstrap";
-import resources from "./locales/index.js";
+import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import { BrowserRouter } from "react-router-dom";
+import { io } from "socket.io-client";
+import i18n from "i18next";
+import { initReactI18next, I18nextProvider } from "react-i18next";
+import filter from "leo-profanity";
+import resources from "./locales/index.js";
 import reducer, { actions } from "./slices/index.js";
 import { channelsApi } from "./services/channelsApi.js";
 import { messagesApi } from "./services/messagesApi.js";
@@ -30,6 +30,9 @@ const init = async () => {
     resources,
     fallbackLng: "ru",
   });
+
+  filter.loadDictionary("ru");
+  filter.add(["пидор", "уебан", "гей", "русня", "сосать", "гандон"])
 
   const socket = io();
 
@@ -82,7 +85,6 @@ const init = async () => {
         <I18nextProvider i18n={i18Instance}>
           <BrowserRouter>
             <App />
-            
           </BrowserRouter>
         </I18nextProvider>
       </Provider>

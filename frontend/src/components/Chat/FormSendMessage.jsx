@@ -1,8 +1,10 @@
 import { useFormik } from "formik";
 import { Form, Button, InputGroup } from "react-bootstrap";
 import { ArrowRightSquare } from "react-bootstrap-icons";
+import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
+import filter from "leo-profanity";
 import { selectors } from "../../selectors";
 import { useAddMessageMutation } from "../../services/messagesApi";
 
@@ -16,7 +18,11 @@ const FormSendMessage = () => {
       body: "",
     },
     onSubmit: ({ body }, { resetForm }) => {
-      const data = { body, channelId, username };
+      const filterBody = filter.clean(body);
+      if (filterBody !== body) {
+        toast.error("Не ругайся!", { containerId: "Parent" })
+      }
+      const data = { body: filterBody, channelId, username };
       addMessage(data);
       resetForm();
     },

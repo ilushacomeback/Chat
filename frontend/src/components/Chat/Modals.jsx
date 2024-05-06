@@ -3,6 +3,7 @@ import cn from "classnames";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import filter from 'leo-profanity'
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
@@ -42,7 +43,8 @@ const ModalChannel = ({ toggleModalChannel }) => {
     validationSchema: getValidateSchema(names, t),
     validateOnChange: false,
     onSubmit: async ({ name }, { resetForm }) => {
-      const response = await addChannel({ name });
+      const filterName = filter.clean(name)
+      const response = await addChannel({ name: filterName });
       dispatch(setActive(response.data.id));
       toast.success(t("toast.addedChannel"), { containerId: "Parent" });
       dispatch(toggleModalChannel({ isOpen: false, type: "modalChannel" }));
@@ -119,8 +121,8 @@ const ModalRemoveChannel = ({ toggleModalChannel }) => {
     dispatch(toggleModalChannel({ isOpen: false, type: "modalRemoveChannel" }));
   };
 
-  const handleRemove = () => {
-    removeChannel(idTouchChannel);
+  const handleRemove = async () => {
+    await removeChannel(idTouchChannel);
     toast.success(t("toast.removedChannel"), { containerId: "Parent" });
     closeModal();
   };
@@ -181,7 +183,8 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
     validationSchema: getValidateSchema(names, t),
     validateOnChange: false,
     onSubmit: async ({ name, id }, { resetForm }) => {
-      await renameChannel({ name, id });
+      const filterName = filter.clean(name)
+      await renameChannel({ name: filterName, id });
       toast.success(t("toast.renamedChannel"), { containerId: "Parent" });
       сloseModal();
       resetForm();
