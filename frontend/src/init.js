@@ -31,8 +31,8 @@ const init = async () => {
     fallbackLng: "ru",
   });
 
-  filter.loadDictionary("ru");
-  // filter.add([""]);
+  const ruDirectory = filter.getDictionary('ru');
+  filter.add(ruDirectory);
 
   const socket = io();
 
