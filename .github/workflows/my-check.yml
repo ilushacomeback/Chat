@@ -5,4 +5,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: cd frontend && npx eslint --ext js,jsx --no-eslintrc --config .eslintrc.yml .
+      - run: cd frontend
+      - run: npm ci
+      - run: npx eslint --ext js,jsx --no-eslintrc --config .eslintrc.yml .
