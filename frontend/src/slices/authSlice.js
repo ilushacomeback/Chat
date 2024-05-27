@@ -7,17 +7,20 @@ const authSlice = createSlice({
   initialState: JSON.parse(localStorage.getItem('user')) || {},
   reducers: {
     setAuth(state, { payload }) {
-      localStorage.setItem('user', JSON.stringify(payload));
       state.token = payload.token;
       state.username = payload.username;
     },
     removeAuth(state) {
-      localStorage.removeItem('user');
       state.token = null;
       state.username = null;
     },
   },
 });
+
+export const authSelectors = {
+  selectToken: (state) => state.auth.token,
+  selectUsername: (state) => state.auth.username,
+};
 
 export const { actions } = authSlice;
 export default authSlice.reducer;

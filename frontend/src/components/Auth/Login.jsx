@@ -6,11 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { useState, useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { actions } from '../../slices/index';
 import { useGetAuthMutation } from '../../services/authApi';
 import { useGetChannelsQuery } from '../../services/channelsApi';
 import { useGetMessagesQuery } from '../../services/messagesApi';
 import routes from '../../routes';
+import logIn from '../../helpers/logIn';
 
 const FormLogin = () => {
   const navigate = useNavigate();
@@ -22,7 +22,6 @@ const FormLogin = () => {
   const [error, setError] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const input = useRef();
-  const { setAuth } = actions;
 
   const formik = useFormik({
     initialValues: {
@@ -40,7 +39,7 @@ const FormLogin = () => {
             throw new Error('disconnect');
           }
         }
-        dispatch(setAuth(response.data));
+        logIn(dispatch, response.data);
         await refetchChannels();
         await refetchMessages();
         setError(false);

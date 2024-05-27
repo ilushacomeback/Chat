@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useSelector } from 'react-redux';
-import selectors from '../selectors';
+import { selectors } from '../slices';
 import Login from './Auth/Login';
 import Signup from './Auth/Signup';
 import ErrorPage from './ErrorPage';
@@ -16,7 +16,7 @@ import ChatBox from './Chat/ChatBox';
 import routes from '../routes';
 
 const PrivateChat = () => {
-  const token = useSelector(selectors.token);
+  const token = useSelector(selectors.authSelectors.selectToken);
   return token ? <Outlet /> : <Navigate to={routes.loginPage()} />;
 };
 

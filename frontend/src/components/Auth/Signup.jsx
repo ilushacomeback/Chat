@@ -7,9 +7,9 @@ import { useTranslation } from 'react-i18next';
 import { useState, useRef, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-import { actions } from '../../slices/index';
 import { useSignupMutation } from '../../services/authApi';
 import routes from '../../routes';
+import logIn from '../../helpers/logIn';
 
 const getValidateSchema = (t) => yup.object().shape({
   username: yup
@@ -33,7 +33,6 @@ const FormSignup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const { setAuth } = actions;
   const [error, setError] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const input = useRef();
@@ -56,7 +55,7 @@ const FormSignup = () => {
             throw new Error('disconnect');
           }
         }
-        dispatch(setAuth(response.data));
+        logIn(dispatch, response.data);
         setLoading(false);
         navigate(routes.homePage());
       } catch (e) {

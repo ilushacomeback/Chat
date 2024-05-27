@@ -5,14 +5,14 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import filter from 'leo-profanity';
-import selectors from '../../selectors';
+import { selectors } from '../../slices';
 import { useAddMessageMutation } from '../../services/messagesApi';
 
 const FormSendMessage = () => {
   const { t } = useTranslation();
   const [addMessage] = useAddMessageMutation();
-  const channelId = useSelector(selectors.currentChannelId);
-  const username = useSelector(selectors.username);
+  const channelId = useSelector(selectors.channelSelectors.selectActiveChannelId);
+  const username = useSelector(selectors.authSelectors.selectUsername);
   const formik = useFormik({
     initialValues: {
       body: '',

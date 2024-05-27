@@ -7,24 +7,23 @@ import filter from 'leo-profanity';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
-import selectors from '../../selectors';
-import { actions } from '../../slices/index';
+import { actions, selectors } from '../../slices/index';
 import {
   useAddChannelMutation,
-  useGetChannelsQuery,
   useRemoveChannelMutation,
   useRenameChannelMutation,
 } from '../../services/channelsApi';
 
-const getValidateSchema = (channels, t) => yup.object().shape({
-  name: yup
-    .string()
-    .required(t('errors.required'))
-    .trim()
-    .min(3, t('errors.minMax'))
-    .max(20, t('errors.minMax'))
-    .notOneOf(channels, t('errors.notUniqNamesChannels')),
-});
+const getValidateSchema = (channels, t) => yup
+  .object().shape({
+    name: yup
+      .string()
+      .required(t('errors.required'))
+      .trim()
+      .min(3, t('errors.minMax'))
+      .max(20, t('errors.minMax'))
+      .notOneOf(channels, t('errors.notUniqNamesChannels')),
+  });
 
 const ModalChannel = ({ toggleModalChannel }) => {
   const { t } = useTranslation();
@@ -32,7 +31,7 @@ const ModalChannel = ({ toggleModalChannel }) => {
   const input = useRef();
   const { setActive } = actions;
   const [addChannel] = useAddChannelMutation();
-  const { data: channels } = useGetChannelsQuery();
+  const channels = useSelector(selectors.channelSelectors.selectChannels);
   const names = channels.map(({ name }) => name);
 
   const formik = useFormik({
@@ -46,7 +45,7 @@ const ModalChannel = ({ toggleModalChannel }) => {
       const response = await addChannel({ name: filterName });
       dispatch(setActive(response.data.id));
       toast.success(t('toast.addedChannel'), { containerId: 'Parent' });
-      dispatch(toggleModalChannel({ isOpen: false, type: 'modalChannel' }));
+      dispatch(toggleModalChannel({ type: null }));
       resetForm();
     },
   });
@@ -63,9 +62,7 @@ const ModalChannel = ({ toggleModalChannel }) => {
           as="button"
           aria-label="Close"
           className="btn btn-close"
-          onClick={() => dispatch(
-            toggleModalChannel({ isOpen: false, type: 'modalChannel' }),
-          )}
+          onClick={() => dispatch(toggleModalChannel({ type: null }))}
         />
       </Modal.Header>
       <Modal.Body>
@@ -90,9 +87,7 @@ const ModalChannel = ({ toggleModalChannel }) => {
             <Button
               as="button"
               className="me-2 btn btn-secondary"
-              onClick={() => dispatch(
-                toggleModalChannel({ isOpen: false, type: 'modalChannel' }),
-              )}
+              onClick={() => dispatch(toggleModalChannel({ type: null }))}
             >
               {t('modals.cancel')}
             </Button>
@@ -110,14 +105,14 @@ const ModalRemoveChannel = ({ toggleModalChannel }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [removeChannel] = useRemoveChannelMutation();
-  const idTouchChannel = useSelector(selectors.idTouchChannel);
+  const touchChannelId = useSelector(selectors.channelSelectors.selectCurrentChannelId);
 
   const closeModal = () => {
-    dispatch(toggleModalChannel({ isOpen: false, type: 'modalRemoveChannel' }));
+    dispatch(toggleModalChannel({ type: null }));
   };
 
   const handleRemove = async () => {
-    await removeChannel(idTouchChannel);
+    await removeChannel(touchChannelId);
     toast.success(t('toast.removedChannel'), { containerId: 'Parent' });
     closeModal();
   };
@@ -160,20 +155,20 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const input = useRef();
-  const idTouchChannel = useSelector(selectors.idTouchChannel);
+  const touchChannelId = useSelector(selectors.channelSelectors.selectCurrentChannelId);
   const [renameChannel] = useRenameChannelMutation();
-  const { data: channels } = useGetChannelsQuery();
+  const channels = useSelector((state) => state.channels.channels);
   const names = channels.map(({ name }) => name);
-  const currentChannel = channels.find(({ id }) => id === idTouchChannel);
+  const currentChannel = channels.find(({ id }) => id === touchChannelId);
 
   const сloseModal = () => {
-    dispatch(toggleModalChannel({ isOpen: false, type: 'modalRenameChannel' }));
+    dispatch(toggleModalChannel({ type: null }));
   };
 
   const formik = useFormik({
     initialValues: {
       name: currentChannel.name,
-      id: idTouchChannel,
+      id: touchChannelId,
     },
     validationSchema: getValidateSchema(names, t),
     validateOnChange: false,
@@ -246,15 +241,14 @@ const mappingModals = {
 };
 
 const Modals = () => {
-  const typeModal = useSelector(selectors.currentModal);
-  const isOpen = useSelector(selectors.isOpen);
+  const typeModal = useSelector(selectors.uiSelectors.selectTypeModal);
   const { toggleModalChannel } = actions;
 
   const CurrentModal = mappingModals[typeModal];
 
-  return (
-    <Modal show={isOpen}>
-      {CurrentModal && <CurrentModal toggleModalChannel={toggleModalChannel} />}
+  return typeModal === null ? null : (
+    <Modal show>
+      <CurrentModal toggleModalChannel={toggleModalChannel} />
     </Modal>
   );
 };

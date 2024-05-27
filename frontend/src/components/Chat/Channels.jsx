@@ -1,32 +1,42 @@
+import { useEffect } from 'react';
 import cn from 'classnames';
 import { Nav, ButtonGroup, Dropdown } from 'react-bootstrap';
 import { PlusSquare } from 'react-bootstrap-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useGetChannelsQuery } from '../../services/channelsApi';
-import { actions } from '../../slices/index';
-import selectors from '../../selectors';
+import { actions, selectors } from '../../slices/index';
 import Modals from './Modals';
 
 const Channels = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const activeChannelId = useSelector(selectors.currentChannelId);
-  const { setActive, toggleModalChannel } = actions;
+  const activeChannelId = useSelector(
+    selectors.channelSelectors.selectActiveChannelId
+  );
+
+  const {
+    setActive,
+    toggleModalChannel,
+    addChannels,
+    setCurrentChannelId
+  } = actions;
+
   const { data: channels, isLoading } = useGetChannelsQuery();
 
   const handleActiveChannel = (id) => () => {
     dispatch(setActive(id));
   };
 
+  useEffect(() => {
+    if (!isLoading && channels) {
+      dispatch(addChannels(channels));
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const handleOpen = (id, type) => {
-    dispatch(
-      toggleModalChannel({
-        isOpen: true,
-        type,
-        id,
-      }),
-    );
+    dispatch(toggleModalChannel({ type }));
+    dispatch(setCurrentChannelId({ id }));
   };
 
   const renderDefaultChannel = (channel) => (
@@ -57,7 +67,7 @@ const Channels = () => {
             'btn',
             {
               'btn-secondary': channel.id === activeChannelId,
-            },
+            }
           )}
           onClick={handleActiveChannel(channel.id)}
         >
@@ -104,9 +114,7 @@ const Channels = () => {
             type="button"
             className="p-0 text-primary btn btn-group-vertical"
             onClick={() => {
-              dispatch(
-                toggleModalChannel({ type: 'modalChannel', isOpen: true }),
-              );
+              dispatch(toggleModalChannel({ type: 'modalChannel' }));
             }}
           >
             <PlusSquare size={20} />
@@ -118,9 +126,11 @@ const Channels = () => {
           id="channels-box"
           className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block"
         >
-          {channels.map((channel) => (channel.removable
-            ? renderCustomChannel(channel)
-            : renderDefaultChannel(channel)))}
+          {channels.map((channel) => (
+            channel.removable
+              ? renderCustomChannel(channel)
+              : renderDefaultChannel(channel)
+          ))}
         </Nav>
       </div>
       <Modals />

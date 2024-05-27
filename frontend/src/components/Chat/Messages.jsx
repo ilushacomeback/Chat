@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next';
 import FormSendMessage from './FormSendMessage';
 import { useGetMessagesQuery } from '../../services/messagesApi';
 import { useGetChannelsQuery } from '../../services/channelsApi';
-import selectors from '../../selectors';
+import { selectors } from '../../slices';
 
 const Messages = () => {
   const { t } = useTranslation();
 
   const { data: channels, isLoading: isLoadingChannels } = useGetChannelsQuery();
   const { data: allMessages, isLoading: isLoadingMessages } = useGetMessagesQuery();
-  const activeChannelId = useSelector(selectors.currentChannelId);
+  const activeChannelId = useSelector(selectors.channelSelectors.selectActiveChannelId);
 
   const currentChannel = channels.find((channel) => activeChannelId === channel.id);
   const messages = allMessages.filter(

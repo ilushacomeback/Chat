@@ -7,7 +7,7 @@ import i18n from 'i18next';
 import { initReactI18next, I18nextProvider } from 'react-i18next';
 import filter from 'leo-profanity';
 import resources from './locales/index.js';
-import reducer, { actions } from './slices/index.js';
+import reducer, { actions, selectors } from './slices/index.js';
 import { channelsApi } from './services/channelsApi.js';
 import { messagesApi } from './services/messagesApi.js';
 import { authApi } from './services/authApi.js';
@@ -57,9 +57,9 @@ const init = async () => {
         const filteredChannels = channels.filter(
           (channel) => channel.id !== id,
         );
-        const currentChannelId = store.getState().ui.activeChannelId;
-        const defaultChannel = store.getState().ui.defaultChannelId;
-        if (currentChannelId === id) {
+        const activeChannelId = selectors.channelSelectors.selectActiveChannelId(store.getState());
+        const defaultChannel = selectors.channelSelectors.selectDefaultChannelId(store.getState());
+        if (activeChannelId === id) {
           store.dispatch(actions.setActive(defaultChannel));
         }
         return filteredChannels;
@@ -79,7 +79,7 @@ const init = async () => {
   });
 
   const rollbarConfig = {
-    accessToken: '74eb98ba7b934e9ca78de39f5908ce33',
+    accessToken: process.env.REACT_APP_ROLLBAR_KEY,
     environment: 'production',
   };
 
