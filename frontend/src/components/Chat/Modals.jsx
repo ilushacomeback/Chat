@@ -1,9 +1,9 @@
 import * as yup from 'yup';
 import cn from 'classnames';
+import filter from 'leo-profanity';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import filter from 'leo-profanity';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';

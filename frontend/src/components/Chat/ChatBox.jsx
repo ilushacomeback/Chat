@@ -4,10 +4,10 @@ import { useDispatch } from 'react-redux';
 import { Spinner } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { actions } from '../../slices/index';
-import Channels from './Channels';
-import Messages from './Messages';
 import { useGetChannelsQuery } from '../../services/channelsApi';
 import { useGetMessagesQuery } from '../../services/messagesApi';
+import Channels from './Channels';
+import Messages from './Messages';
 import routes from '../../routes';
 
 const ChatBox = () => {

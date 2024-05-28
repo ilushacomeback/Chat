@@ -11,16 +11,18 @@ import reducer, { actions, selectors } from './slices/index.js';
 import { channelsApi } from './services/channelsApi.js';
 import { messagesApi } from './services/messagesApi.js';
 import { authApi } from './services/authApi.js';
+import ContextProvider from './context/ContextProvider.jsx';
 import App from './components/App.jsx';
 
 const init = async () => {
   const store = configureStore({
     reducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([
-      channelsApi.middleware,
-      messagesApi.middleware,
-      authApi.middleware,
-    ]),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+      .concat([
+        channelsApi.middleware,
+        messagesApi.middleware,
+        authApi.middleware,
+      ]),
   });
 
   const i18Instance = i18n.createInstance();
@@ -39,7 +41,7 @@ const init = async () => {
     store.dispatch(
       messagesApi.util.updateQueryData('getMessages', undefined, (messages) => {
         messages.push(payload);
-      }),
+      })
     );
   });
 
@@ -47,7 +49,7 @@ const init = async () => {
     store.dispatch(
       channelsApi.util.updateQueryData('getChannels', undefined, (channels) => {
         channels.push(payload);
-      }),
+      })
     );
   });
 
@@ -55,15 +57,19 @@ const init = async () => {
     store.dispatch(
       channelsApi.util.updateQueryData('getChannels', undefined, (channels) => {
         const filteredChannels = channels.filter(
-          (channel) => channel.id !== id,
+          (channel) => channel.id !== id
         );
-        const activeChannelId = selectors.channelSelectors.selectActiveId(store.getState());
-        const defaultChannel = selectors.channelSelectors.selectDefaultId(store.getState());
+        const activeChannelId = selectors.channelSelectors.selectActiveId(
+          store.getState()
+        );
+        const defaultChannel = selectors.channelSelectors.selectDefaultId(
+          store.getState()
+        );
         if (activeChannelId === id) {
           store.dispatch(actions.setActive(defaultChannel));
         }
         return filteredChannels;
-      }),
+      })
     );
   });
 
@@ -71,10 +77,10 @@ const init = async () => {
     store.dispatch(
       channelsApi.util.updateQueryData('getChannels', undefined, (channels) => {
         const currentChannel = channels.find(
-          (channel) => channel.id === payload.id,
+          (channel) => channel.id === payload.id
         );
         currentChannel.name = payload.name;
-      }),
+      })
     );
   });
 
@@ -89,7 +95,9 @@ const init = async () => {
         <RollProvider config={rollbarConfig}>
           <ErrorBoundary>
             <I18nextProvider i18n={i18Instance}>
-              <App />
+              <ContextProvider>
+                <App />
+              </ContextProvider>
             </I18nextProvider>
           </ErrorBoundary>
         </RollProvider>

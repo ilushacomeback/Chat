@@ -1,10 +1,10 @@
+import filter from 'leo-profanity';
 import { useFormik } from 'formik';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import filter from 'leo-profanity';
 import { selectors } from '../../slices';
 import { useAddMessageMutation } from '../../services/messagesApi';
 

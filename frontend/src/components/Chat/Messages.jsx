@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import FormSendMessage from './FormSendMessage';
 import { useGetMessagesQuery } from '../../services/messagesApi';
 import { useGetChannelsQuery } from '../../services/channelsApi';
 import { selectors } from '../../slices';
+import FormSendMessage from './FormSendMessage';
 
 const Messages = () => {
   const { t } = useTranslation();

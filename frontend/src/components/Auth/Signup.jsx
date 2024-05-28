@@ -1,15 +1,14 @@
+import { useState, useRef, useEffect, useContext } from 'react';
 import * as yup from 'yup';
 import cn from 'classnames';
 import { useFormik } from 'formik';
 import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useState, useRef, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
 import { useSignupMutation } from '../../services/authApi';
 import routes from '../../routes';
-import logIn from '../../helpers/logIn';
+import AuthContext from '../../context/AuthContext';
 
 const getValidateSchema = (t) => yup.object().shape({
   username: yup
@@ -29,9 +28,9 @@ const getValidateSchema = (t) => yup.object().shape({
 });
 
 const FormSignup = () => {
+  const { logIn } = useContext(AuthContext);
   const [signup] = useSignupMutation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { t } = useTranslation();
   const [error, setError] = useState(false);
   const input = useRef();
@@ -53,7 +52,7 @@ const FormSignup = () => {
             throw new Error('disconnect');
           }
         }
-        logIn(dispatch, response.data);
+        logIn(response.data);
         navigate(routes.homePage());
       } catch (e) {
         console.log(e);
