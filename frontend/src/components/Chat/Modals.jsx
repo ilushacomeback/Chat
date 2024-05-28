@@ -104,7 +104,7 @@ const ModalRemoveChannel = ({ toggleModalChannel }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [removeChannel] = useRemoveChannelMutation();
-  const currentChannelId = useSelector(selectors.channelSelectors.selectCurrentChannelId);
+  const currentChannelId = useSelector(selectors.channelSelectors.selectCurrentId);
 
   const closeModal = () => {
     dispatch(toggleModalChannel({ type: null }));

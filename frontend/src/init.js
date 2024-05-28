@@ -57,8 +57,8 @@ const init = async () => {
         const filteredChannels = channels.filter(
           (channel) => channel.id !== id,
         );
-        const activeChannelId = selectors.channelSelectors.selectActiveChannelId(store.getState());
-        const defaultChannel = selectors.channelSelectors.selectDefaultChannelId(store.getState());
+        const activeChannelId = selectors.channelSelectors.selectActiveId(store.getState());
+        const defaultChannel = selectors.channelSelectors.selectDefaultId(store.getState());
         if (activeChannelId === id) {
           store.dispatch(actions.setActive(defaultChannel));
         }

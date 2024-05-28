@@ -10,7 +10,7 @@ const Messages = () => {
 
   const { data: channels, isLoading: isLoadingChannels } = useGetChannelsQuery();
   const { data: allMessages, isLoading: isLoadingMessages } = useGetMessagesQuery();
-  const activeChannelId = useSelector(selectors.channelSelectors.selectActiveChannelId);
+  const activeChannelId = useSelector(selectors.channelSelectors.selectActiveId);
 
   const currentChannel = channels.find((channel) => activeChannelId === channel.id);
   const messages = allMessages.filter(

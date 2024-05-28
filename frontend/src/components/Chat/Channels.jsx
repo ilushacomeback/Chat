@@ -12,7 +12,7 @@ const Channels = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const activeChannelId = useSelector(
-    selectors.channelSelectors.selectActiveChannelId,
+    selectors.channelSelectors.selectActiveId,
   );
 
   const {

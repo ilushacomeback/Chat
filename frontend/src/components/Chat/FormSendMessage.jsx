@@ -11,7 +11,7 @@ import { useAddMessageMutation } from '../../services/messagesApi';
 const FormSendMessage = () => {
   const { t } = useTranslation();
   const [addMessage] = useAddMessageMutation();
-  const channelId = useSelector(selectors.channelSelectors.selectActiveChannelId);
+  const channelId = useSelector(selectors.channelSelectors.selectActiveId);
   const username = useSelector(selectors.authSelectors.selectUsername);
   const formik = useFormik({
     initialValues: {
