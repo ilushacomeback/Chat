@@ -34,7 +34,6 @@ const FormSignup = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [error, setError] = useState(false);
-  const [isLoading, setLoading] = useState(false);
   const input = useRef();
   const formik = useFormik({
     initialValues: {
@@ -44,8 +43,7 @@ const FormSignup = () => {
     },
     validationSchema: getValidateSchema(t),
     validateOnChange: false,
-    onSubmit: async (values) => {
-      setLoading(true);
+    onSubmit: async (values, { setSubmitting }) => {
       try {
         const response = await signup(values);
         if (response?.error) {
@@ -56,7 +54,6 @@ const FormSignup = () => {
           }
         }
         logIn(dispatch, response.data);
-        setLoading(false);
         navigate(routes.homePage());
       } catch (e) {
         console.log(e);
@@ -65,7 +62,8 @@ const FormSignup = () => {
         } else {
           toast.error(t('errors.networkError'), { containerId: 'Parent' });
         }
-        setLoading(false);
+      } finally {
+        setSubmitting(false);
       }
     },
   });
@@ -161,7 +159,7 @@ const FormSignup = () => {
                   type="submit"
                   className="w-100 mb-3"
                   variant="outline-primary"
-                  disabled={isLoading}
+                  disabled={formik.isSubmitting}
                 >
                   {t('registrationPage.doRegistration')}
                 </Button>
