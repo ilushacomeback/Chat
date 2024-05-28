@@ -31,14 +31,13 @@ const ModalChannel = ({ toggleModalChannel }) => {
   const input = useRef();
   const { setActive } = actions;
   const [addChannel] = useAddChannelMutation();
-  const channels = useSelector(selectors.channelSelectors.selectChannels);
-  const names = channels.map(({ name }) => name);
+  const namesChannels = useSelector(selectors.channelSelectors.selectChannelsNames());
 
   const formik = useFormik({
     initialValues: {
       name: '',
     },
-    validationSchema: getValidateSchema(names, t),
+    validationSchema: getValidateSchema(namesChannels, t),
     validateOnChange: false,
     onSubmit: async ({ name }, { resetForm }) => {
       const filterName = filter.clean(name);
@@ -105,14 +104,14 @@ const ModalRemoveChannel = ({ toggleModalChannel }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [removeChannel] = useRemoveChannelMutation();
-  const touchChannelId = useSelector(selectors.channelSelectors.selectCurrentChannelId);
+  const currentChannelId = useSelector(selectors.channelSelectors.selectCurrentChannelId);
 
   const closeModal = () => {
     dispatch(toggleModalChannel({ type: null }));
   };
 
   const handleRemove = async () => {
-    await removeChannel(touchChannelId);
+    await removeChannel(currentChannelId);
     toast.success(t('toast.removedChannel'), { containerId: 'Parent' });
     closeModal();
   };
@@ -155,11 +154,9 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const input = useRef();
-  const touchChannelId = useSelector(selectors.channelSelectors.selectCurrentChannelId);
   const [renameChannel] = useRenameChannelMutation();
-  const channels = useSelector((state) => state.channels.channels);
-  const names = channels.map(({ name }) => name);
-  const currentChannel = channels.find(({ id }) => id === touchChannelId);
+  const currentChannel = useSelector(selectors.channelSelectors.selectCurrentChannel());
+  const namesChannels = useSelector(selectors.channelSelectors.selectChannelsNames());
 
   const сloseModal = () => {
     dispatch(toggleModalChannel({ type: null }));
@@ -168,9 +165,9 @@ const ModalRenameChannel = ({ toggleModalChannel }) => {
   const formik = useFormik({
     initialValues: {
       name: currentChannel.name,
-      id: touchChannelId,
+      id: currentChannel.id,
     },
-    validationSchema: getValidateSchema(names, t),
+    validationSchema: getValidateSchema(namesChannels, t),
     validateOnChange: false,
     onSubmit: async ({ name, id }, { resetForm }) => {
       const filterName = filter.clean(name);

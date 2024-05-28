@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { channelsApi } from '../services/channelsApi';
 
 const channelsSlice = createSlice({
@@ -36,6 +36,15 @@ const channelsSlice = createSlice({
             (channel) => channel.id !== payload.id
           );
         }
+      )
+      .addMatcher(
+        channelsApi.endpoints.renameChannel.matchFulfilled,
+        (state, { payload }) => {
+          const currentChannel = state.channels.find(
+            (channel) => channel.id === payload.id
+          );
+          currentChannel.name = payload.name;
+        }
       );
   },
 });
@@ -45,6 +54,16 @@ export const channelSelectors = {
   selectDefaultChannelId: (state) => state.channels.defaultChannelId,
   selectChannels: (state) => state.channels.channels,
   selectCurrentChannelId: (state) => state.channels.currentChannelId,
+  selectCurrentChannel() {
+    return createSelector(
+      this.selectCurrentChannelId,
+      this.selectChannels,
+      (id, channels) => channels.find((channel) => channel.id === id)
+    );
+  },
+  selectChannelsNames() {
+    return createSelector(this.selectChannels, (channels) => channels.map(({ name }) => name));
+  },
 };
 
 export const { actions } = channelsSlice;

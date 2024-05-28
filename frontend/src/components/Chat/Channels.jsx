@@ -12,14 +12,14 @@ const Channels = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const activeChannelId = useSelector(
-    selectors.channelSelectors.selectActiveChannelId
+    selectors.channelSelectors.selectActiveChannelId,
   );
 
   const {
     setActive,
     toggleModalChannel,
     addChannels,
-    setCurrentChannelId
+    setCurrentChannelId,
   } = actions;
 
   const { data: channels, isLoading } = useGetChannelsQuery();
@@ -67,7 +67,7 @@ const Channels = () => {
             'btn',
             {
               'btn-secondary': channel.id === activeChannelId,
-            }
+            },
           )}
           onClick={handleActiveChannel(channel.id)}
         >
